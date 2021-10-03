@@ -5,8 +5,11 @@
 #include <gle/common.hpp>
 #include <gle/gl.hpp>
 #include <gle/logging.hpp>
+#include <gle/render_pass.hpp>
 #include <glm/glm.hpp>
+#include <memory>
 #include <string>
+#include <vector>
 
 GLE_NAMESPACE_BEGIN
 
@@ -39,6 +42,7 @@ public:
   inline void start();
 
   // Getters and setters
+  inline void add_render_pass(std::shared_ptr<RenderPass> pass);
   constexpr WindowOptions &options();
   constexpr const WindowOptions &options() const;
   constexpr const std::string &name() const;
@@ -51,6 +55,7 @@ private:
   std::string _name;
   glm::ivec2 _dimensions;
   WindowOptions _options;
+  std::vector<std::shared_ptr<RenderPass>> render_passes;
 
   GLFWwindow *_window = nullptr;
   friend inline void __internal__::framebuffer_callback(GLFWwindow *window,

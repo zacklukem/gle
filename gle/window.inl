@@ -10,16 +10,18 @@ inline void framebuffer_callback(GLFWwindow *window, int width, int height) {
 } // namespace __internal__
 
 inline Window::Window(const std::string &name, const glm::ivec2 &dimensions)
-    : _name(name), _dimensions(dimensions) {}
+    : _name(name), _dimensions(dimensions), render_passes() {}
 inline Window::Window(const std::string &name, int width, int height)
-    : _name(name), _dimensions(width, height) {}
+    : _name(name), _dimensions(width, height), render_passes() {}
 
 inline Window::Window(const std::string &name, WindowOptions options,
                       const glm::ivec2 &dimensions)
-    : _name(name), _options(options), _dimensions(dimensions) {}
+    : _name(name), _options(options), _dimensions(dimensions), render_passes() {
+}
 inline Window::Window(const std::string &name, WindowOptions options, int width,
                       int height)
-    : _name(name), _options(options), _dimensions(width, height) {}
+    : _name(name), _options(options), _dimensions(width, height),
+      render_passes() {}
 
 inline Window::~Window() {
   glfwDestroyWindow(window());
@@ -71,9 +73,17 @@ inline void Window::start() {
   while (!glfwWindowShouldClose(window())) {
     glClear(GL_COLOR_BUFFER_BIT);
 
+    for (auto &pass : render_passes) {
+      pass->do_render();
+    }
+
     glfwSwapBuffers(window());
     glfwPollEvents();
   }
+}
+
+inline void Window::add_render_pass(std::shared_ptr<RenderPass> pass) {
+  render_passes.push_back(pass);
 }
 
 constexpr WindowOptions &Window::options() { return _options; }
