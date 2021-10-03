@@ -1,0 +1,7 @@
+---
+BasedOnStyle: LLVM
+IndentWidth: 2
+---
+Language: Cpp
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
