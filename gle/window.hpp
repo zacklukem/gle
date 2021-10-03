@@ -14,43 +14,45 @@ namespace __internal__ {
 inline void framebuffer_callback(GLFWwindow *window, int width, int height);
 }
 
-struct GleWindowOptions {
+struct WindowOptions {
   int gl_num_samples = 4;
   int gl_major_version = 4;
   int gl_minor_version = 1;
 };
 
-class GleWindow {
+class Window {
 public:
-  GleWindow(GleWindow &) = delete;
-  GleWindow(GleWindow &&) = delete;
-  GleWindow(const GleWindow &) = delete;
-  GleWindow(const GleWindow &&) = delete;
-  inline GleWindow(const std::string &name, const glm::ivec2 &dimensions);
-  inline GleWindow(const std::string &name, int width, int height);
-  inline GleWindow(const std::string &name, GleWindowOptions options,
-                   const glm::ivec2 &dimensions);
-  inline GleWindow(const std::string &name, GleWindowOptions options, int width,
-                   int height);
+  Window(Window &) = delete;
+  Window(Window &&) = delete;
+  Window(const Window &) = delete;
+  Window(const Window &&) = delete;
+  inline Window(const std::string &name, const glm::ivec2 &dimensions);
+  inline Window(const std::string &name, int width, int height);
+  inline Window(const std::string &name, WindowOptions options,
+                const glm::ivec2 &dimensions);
+  inline Window(const std::string &name, WindowOptions options, int width,
+                int height);
 
-  inline ~GleWindow();
+  inline ~Window();
 
   inline void init();
+  inline void start();
 
   // Getters and setters
-  constexpr GleWindowOptions &options();
-  constexpr const GleWindowOptions &options() const;
+  constexpr WindowOptions &options();
+  constexpr const WindowOptions &options() const;
   constexpr const std::string &name() const;
   constexpr const glm::ivec2 &dimensions() const;
   constexpr int width() const;
   constexpr int height() const;
+  constexpr GLFWwindow *window();
 
 private:
   std::string _name;
   glm::ivec2 _dimensions;
-  GleWindowOptions _options;
+  WindowOptions _options;
 
-  GLFWwindow *window = nullptr;
+  GLFWwindow *_window = nullptr;
   friend inline void __internal__::framebuffer_callback(GLFWwindow *window,
                                                         int width, int height);
 };
