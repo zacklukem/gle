@@ -5,3 +5,4 @@ IndentWidth: 2
 Language: Cpp
 AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true
+IndentPPDirectives: AfterHash
