@@ -49,6 +49,11 @@ inline void GleWindow::init() {
   glfwMakeContextCurrent(window);
   glfwSetFramebufferSizeCallback(window, __internal__::framebuffer_callback);
 
+#ifdef GLE_VERBOSE
+  const char *glfw_version = glfwGetVersionString();
+  GLE_LOG(GLE_INFO, "GLFW version %s loaded.", glfw_version);
+#endif
+
   // load GL
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     throw std::runtime_error("Failed to load GLAD");
