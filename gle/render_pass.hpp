@@ -11,6 +11,7 @@ public:
   /// @brief Render this pass
   ///
   inline void do_render();
+  inline virtual void load();
 
 protected:
   virtual void render() = 0;

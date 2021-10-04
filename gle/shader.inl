@@ -51,7 +51,6 @@ inline void Shader::load() {
   glBindAttribLocation(program, 0, "position");
   glBindAttribLocation(program, 1, "normal");
   glBindAttribLocation(program, 2, "uv");
-  glBindAttribLocation(program, 3, "color");
 
   glAttachShader(program, vertex_shader);
   glAttachShader(program, fragment_shader);

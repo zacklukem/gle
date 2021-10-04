@@ -67,6 +67,12 @@ inline void Window::init() {
 #endif
 
   glViewport(0, 0, width(), height());
+
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+  for (auto pass : render_passes) {
+    pass->load();
+  }
 }
 
 inline void Window::start() {
