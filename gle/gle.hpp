@@ -5,6 +5,7 @@
 #include <gle/logging.hpp>
 
 #include <gle/gl.hpp>
+#include <gle/mesh.hpp>
 #include <gle/render_pass.hpp>
 #include <gle/shader.hpp>
 #include <gle/window.hpp>
