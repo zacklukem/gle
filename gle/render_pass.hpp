@@ -8,6 +8,8 @@ GLE_NAMESPACE_BEGIN
 
 class RenderPass {
 public:
+  /// @brief Render this pass
+  ///
   inline void do_render();
 
 protected:
