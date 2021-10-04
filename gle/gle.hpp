@@ -6,6 +6,7 @@
 
 #include <gle/gl.hpp>
 #include <gle/render_pass.hpp>
+#include <gle/shader.hpp>
 #include <gle/window.hpp>
 
 #endif // GLE_GLE_HPP
