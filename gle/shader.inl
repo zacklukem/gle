@@ -1,3 +1,6 @@
+
+#include <glm/gtc/type_ptr.hpp>
+
 GLE_NAMESPACE_BEGIN
 
 inline Shader::Shader(const std::string &vertex_source,
@@ -67,6 +70,58 @@ inline void Shader::load() {
   }
 }
 
-inline void Shader::use() { glUseProgram(program); }
+inline void Shader::use(const MVPShaderUniforms &uniforms) {
+  on_use();
+  uniforms.load(*this);
+  glUseProgram(program);
+}
+
+inline void Shader::uniform(const char *name, float val) {
+  auto u = glGetUniformLocation(program, name);
+  glUniform1f(u, val);
+}
+
+inline void Shader::uniform(const char *name, const glm::vec2 &val) {
+  auto u = glGetUniformLocation(program, name);
+  glUniform2fv(u, 1, glm::value_ptr(val));
+}
+
+inline void Shader::uniform(const char *name, const glm::vec3 &val) {
+  auto u = glGetUniformLocation(program, name);
+  glUniform3fv(u, 1, glm::value_ptr(val));
+}
+
+inline void Shader::uniform(const char *name, const glm::vec4 &val) {
+  auto u = glGetUniformLocation(program, name);
+  glUniform4fv(u, 1, glm::value_ptr(val));
+}
+
+inline void Shader::uniform(const char *name, const glm::mat2 &val) {
+  auto u = glGetUniformLocation(program, name);
+  glUniformMatrix2fv(u, 1, GL_FALSE, glm::value_ptr(val));
+}
+
+inline void Shader::uniform(const char *name, const glm::mat3 &val) {
+  auto u = glGetUniformLocation(program, name);
+  glUniformMatrix3fv(u, 1, GL_FALSE, glm::value_ptr(val));
+}
+
+inline void Shader::uniform(const char *name, const glm::mat4 &val) {
+  auto u = glGetUniformLocation(program, name);
+  glUniformMatrix4fv(u, 1, GL_FALSE, glm::value_ptr(val));
+}
+
+inline MVPShaderUniforms::MVPShaderUniforms(const glm::mat4 &model,
+                                            const glm::mat4 &view,
+                                            const glm::mat4 &projection)
+    : model(model), view(view), projection(projection) {}
+
+inline void MVPShaderUniforms::load(Shader &shader) const {
+  shader.uniform("model", model);
+  shader.uniform("view", view);
+  shader.uniform("projection", projection);
+}
+
+inline void Shader::on_use() {}
 
 GLE_NAMESPACE_END

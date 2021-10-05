@@ -69,6 +69,8 @@ inline void Window::init() {
   glViewport(0, 0, width(), height());
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_DEPTH_TEST);
 
   for (auto pass : render_passes) {
     pass->load();
@@ -77,10 +79,10 @@ inline void Window::init() {
 
 inline void Window::start() {
   while (!glfwWindowShouldClose(window())) {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (auto &pass : render_passes) {
-      pass->do_render();
+      pass->do_render(camera);
     }
 
     glfwSwapBuffers(window());
@@ -103,5 +105,9 @@ constexpr int Window::width() const { return _dimensions.x; }
 constexpr int Window::height() const { return _dimensions.y; }
 
 constexpr GLFWwindow *Window::window() { return _window; }
+
+inline void Window::set_camera(std::shared_ptr<Camera> camera) {
+  this->camera = camera;
+}
 
 GLE_NAMESPACE_END

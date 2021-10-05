@@ -2,6 +2,7 @@
 #define GLE_WINDOW_HPP
 
 #include <exception>
+#include <gle/camera.hpp>
 #include <gle/common.hpp>
 #include <gle/gl.hpp>
 #include <gle/logging.hpp>
@@ -124,11 +125,14 @@ public:
   /// @return the internal glfw window
   constexpr GLFWwindow *window();
 
+  inline void set_camera(std::shared_ptr<Camera> camera);
+
 private:
   std::string _name;
   glm::ivec2 _dimensions;
   WindowOptions _options;
   std::vector<std::shared_ptr<RenderPass>> render_passes;
+  std::shared_ptr<Camera> camera;
 
   GLFWwindow *_window = nullptr;
   friend inline void __internal__::framebuffer_callback(GLFWwindow *window,

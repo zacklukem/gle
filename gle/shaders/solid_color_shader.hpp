@@ -8,7 +8,11 @@ GLE_NAMESPACE_BEGIN
 
 class SolidColorShader : public Shader {
 public:
-  inline SolidColorShader();
+  inline SolidColorShader(const glm::vec3 &color);
+  inline virtual void on_use() override;
+
+private:
+  glm::vec3 color;
 };
 
 GLE_NAMESPACE_END

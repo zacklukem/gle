@@ -3,6 +3,7 @@
 
 #include <gle/common.hpp>
 #include <gle/gl.hpp>
+#include <memory>
 
 GLE_NAMESPACE_BEGIN
 
@@ -10,11 +11,11 @@ class RenderPass {
 public:
   /// @brief Render this pass
   ///
-  inline void do_render();
+  inline void do_render(std::shared_ptr<Camera> camera);
   inline virtual void load();
 
 protected:
-  virtual void render() = 0;
+  virtual void render(std::shared_ptr<Camera> camera) = 0;
 };
 
 GLE_NAMESPACE_END

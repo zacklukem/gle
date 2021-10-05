@@ -1,6 +1,7 @@
 #ifndef GLE_PASSES_OBJECT_RENDER_PASS_HPP
 #define GLE_PASSES_OBJECT_RENDER_PASS_HPP
 
+#include <gle/camera.hpp>
 #include <gle/common.hpp>
 #include <gle/object.hpp>
 #include <gle/render_pass.hpp>
@@ -12,7 +13,7 @@ class ObjectRenderPass : public RenderPass {
 public:
   inline void add_object(std::shared_ptr<Object>);
 
-  virtual void render() override;
+  virtual void render(std::shared_ptr<Camera> camera) override;
   virtual void load() override;
 
 private:

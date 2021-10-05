@@ -4,6 +4,7 @@
 #include <gle/fwd.hpp>
 #include <gle/logging.hpp>
 
+#include <gle/camera.hpp>
 #include <gle/gl.hpp>
 #include <gle/mesh.hpp>
 #include <gle/object.hpp>

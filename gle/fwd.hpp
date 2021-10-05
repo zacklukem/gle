@@ -8,6 +8,11 @@ GLE_NAMESPACE_BEGIN
 class Window;
 struct WindowOptions;
 class RenderPass;
+class Shader;
+class Object;
+class Mesh;
+class MVPShaderOptions;
+class Camera;
 
 GLE_NAMESPACE_END
 

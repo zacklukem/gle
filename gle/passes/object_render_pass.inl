@@ -1,16 +1,20 @@
+#include <glm/gtc/matrix_transform.hpp>
+
 GLE_NAMESPACE_BEGIN
 
 inline void ObjectRenderPass::load() {
   for (auto object : objects) {
-    // object->shader()->load();
     object->mesh()->init_buffers();
   }
 }
 
-inline void ObjectRenderPass::render() {
+inline void ObjectRenderPass::render(std::shared_ptr<Camera> camera) {
   for (auto object : objects) {
-    object->shader()->use();
+    auto uniforms =
+        MVPShaderUniforms(object->model_matrix(), camera->view_matrix(),
+                          camera->projection_matrix());
 
+    object->shader()->use(uniforms);
     object->mesh()->bind_buffers();
 
     glDrawElements(GL_TRIANGLES, object->mesh()->num_elements(),

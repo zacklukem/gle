@@ -8,6 +8,17 @@
 
 GLE_NAMESPACE_BEGIN
 
+class Shader;
+
+struct MVPShaderUniforms {
+  glm::mat4 model;
+  glm::mat4 view;
+  glm::mat4 projection;
+  inline MVPShaderUniforms(const glm::mat4 &model, const glm::mat4 &view,
+                           const glm::mat4 &projection);
+  void load(Shader &shader) const;
+};
+
 /// @brief A complete shader program including vertex, fragment and geometry
 ///        shaders
 class Shader {
@@ -39,9 +50,23 @@ public:
   /// Must be called after GL is initialized
   inline void load();
 
-  /// @brief Activates this shader program
-  /// Must be called after load()
-  inline void use();
+  /// @brief Use the shader and load the given uniforms
+  ///
+  /// @param uniforms
+  inline void use(const MVPShaderUniforms &uniforms);
+
+  inline void uniform(const char *name, float val);
+  inline void uniform(const char *name, const glm::vec2 &val);
+  inline void uniform(const char *name, const glm::vec3 &val);
+  inline void uniform(const char *name, const glm::vec4 &val);
+  inline void uniform(const char *name, const glm::mat2 &val);
+  inline void uniform(const char *name, const glm::mat3 &val);
+  inline void uniform(const char *name, const glm::mat4 &val);
+
+protected:
+  /// @brief Runs when the shader is used
+  ///
+  inline virtual void on_use();
 
 private:
   std::string vertex_source;
