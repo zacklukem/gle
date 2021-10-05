@@ -2,7 +2,7 @@ GLE_NAMESPACE_BEGIN
 
 template <class T>
 constexpr VBO<T>::VBO(GLuint type, bool dynamic)
-    : handle(0), type(type), dynamic(dynamic) {}
+    : type(type), handle(0), dynamic(dynamic) {}
 
 template <class T> inline VBO<T>::~VBO() { glDeleteBuffers(1, &handle); }
 

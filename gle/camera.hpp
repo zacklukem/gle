@@ -33,6 +33,7 @@ public:
   inline const glm::mat4 &projection_matrix();
 
 private:
+  inline void update_view_projection();
   glm::mat4 _view_matrix;
   glm::mat4 _projection_matrix;
 

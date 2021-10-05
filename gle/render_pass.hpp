@@ -11,6 +11,8 @@ GLE_NAMESPACE_BEGIN
 ///
 class RenderPass {
 public:
+  inline virtual ~RenderPass();
+
   /// @brief Render this pass
   ///
   inline void do_render(std::shared_ptr<Camera> camera);

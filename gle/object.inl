@@ -1,16 +1,16 @@
 GLE_NAMESPACE_BEGIN
 inline Object::Object(std::shared_ptr<Shader> shader,
                       std::shared_ptr<Mesh> mesh)
-    : _shader(shader), _mesh(mesh), _position(0), _rotation(glm::vec3(0)),
-      _scale(1) {
+    : _shader(shader), _mesh(mesh), _position(0), _scale(1),
+      _rotation(glm::vec3(0)) {
   update_model_matrix();
 }
 
 inline Object::Object(std::shared_ptr<Shader> shader,
                       std::shared_ptr<Mesh> mesh, const glm::vec3 &position,
                       const glm::quat &rotation, const glm::vec3 &scale)
-    : _shader(shader), _mesh(mesh), _position(position), _rotation(rotation),
-      _scale(scale) {
+    : _shader(shader), _mesh(mesh), _position(position), _scale(scale),
+      _rotation(rotation) {
   update_model_matrix();
 }
 inline std::shared_ptr<Shader> Object::shader() { return _shader; }

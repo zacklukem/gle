@@ -61,7 +61,7 @@ public:
                 const std::string &fragment_source,
                 const std::string &geometry_source);
 
-  inline ~Shader();
+  virtual inline ~Shader();
 
   /// @brief Loads and compiles the given shader sources.
   ///

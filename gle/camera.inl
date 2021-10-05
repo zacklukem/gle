@@ -4,14 +4,12 @@ GLE_NAMESPACE_BEGIN
 
 inline Camera::Camera(glm::vec3 origin, glm::vec3 up, glm::vec3 target,
                       float aspect, float fov, float z_near, float z_far)
-    : origin(origin), target(target), up(up), aspect(aspect), fov(fov),
-      z_near(z_near), z_far(z_far) {
+    : aspect(aspect), fov(fov), z_near(z_near), z_far(z_far), origin(origin),
+      up(up), target(target) {
+  update_view_projection();
+}
 
-  // auto direction = glm::normalize(origin - target);
-  // auto right = glm::normalize(glm::cross(true_up, direction));
-
-  // up = glm::cross(direction, right);
-
+inline void Camera::update_view_projection() {
   _view_matrix = glm::lookAt(origin, target, up);
   _projection_matrix = glm::perspective(fov, aspect, z_near, z_far);
 }

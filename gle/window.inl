@@ -16,11 +16,11 @@ inline Window::Window(const std::string &name, int width, int height)
 
 inline Window::Window(const std::string &name, WindowOptions options,
                       const glm::ivec2 &dimensions)
-    : _name(name), _options(options), _dimensions(dimensions), render_passes() {
+    : _name(name), _dimensions(dimensions), _options(options), render_passes() {
 }
 inline Window::Window(const std::string &name, WindowOptions options, int width,
                       int height)
-    : _name(name), _options(options), _dimensions(width, height),
+    : _name(name), _dimensions(width, height), _options(options),
       render_passes() {}
 
 inline Window::~Window() {
@@ -41,7 +41,7 @@ inline void Window::init() {
 
   if (window() == nullptr) {
     const char *description;
-    int code = glfwGetError(&description);
+    glfwGetError(&description);
     throw std::runtime_error(std::string("Failed to create GLFW window") +
                              description);
   }

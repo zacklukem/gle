@@ -2,8 +2,8 @@ GLE_NAMESPACE_BEGIN
 
 inline Mesh::Mesh(std::vector<glm::vec3> vertices,
                   std::vector<glm::uvec3> triangles)
-    : vertices(vertices), triangles(triangles), uvs(vertices.size()),
-      normals(vertices.size()), vertices_vbo(GL_ARRAY_BUFFER, false),
+    : vertices(vertices), normals(vertices.size()), uvs(vertices.size()),
+      triangles(triangles), vertices_vbo(GL_ARRAY_BUFFER, false),
       normals_vbo(GL_ARRAY_BUFFER, false), uvs_vbo(GL_ARRAY_BUFFER, false),
       triangles_vbo(GL_ELEMENT_ARRAY_BUFFER, false) {
   calculate_normals();

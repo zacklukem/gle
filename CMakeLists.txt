@@ -12,6 +12,8 @@ find_package(OpenGL REQUIRED)
 find_package(glm REQUIRED)
 find_package(glfw3 REQUIRED)
 
+add_compile_options(-Wall -Wextra -pedantic -Werror)
+
 include_directories(basic PUBLIC glad/include)
 add_library(glad "glad/src/glad.c")
 
