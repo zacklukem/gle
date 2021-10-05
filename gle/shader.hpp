@@ -8,14 +8,31 @@
 
 GLE_NAMESPACE_BEGIN
 
-class Shader;
-
+/// @brief Structure representing the matrices for model view and projection
+///
 struct MVPShaderUniforms {
+  /// @brief the model matrix
+  ///
   glm::mat4 model;
+
+  /// @brief the view matrix
+  ///
   glm::mat4 view;
+
+  /// @brief the projection matrix
+  ///
   glm::mat4 projection;
+
+  /// @brief Construct a new MVPShaderUniforms object with the given values
+  ///
+  /// @param model
+  /// @param view
+  /// @param projection
   inline MVPShaderUniforms(const glm::mat4 &model, const glm::mat4 &view,
                            const glm::mat4 &projection);
+  /// @brief Load the current values into the given shader's uniforms
+  ///
+  /// @param shader
   void load(Shader &shader) const;
 };
 
@@ -47,7 +64,9 @@ public:
   inline ~Shader();
 
   /// @brief Loads and compiles the given shader sources.
+  ///
   /// Must be called after GL is initialized
+  /// @exception std::runtime_error thrown if the shader fails to compile
   inline void load();
 
   /// @brief Use the shader and load the given uniforms
@@ -55,12 +74,46 @@ public:
   /// @param uniforms
   inline void use(const MVPShaderUniforms &uniforms);
 
+  /// @brief Set the given uniform to the given value
+  ///
+  /// @param name
+  /// @param val
   inline void uniform(const char *name, float val);
+
+  /// @brief Set the given uniform to the given value
+  ///
+  /// @param name
+  /// @param val
   inline void uniform(const char *name, const glm::vec2 &val);
+
+  /// @brief Set the given uniform to the given value
+  ///
+  /// @param name
+  /// @param val
   inline void uniform(const char *name, const glm::vec3 &val);
+
+  /// @brief Set the given uniform to the given value
+  ///
+  /// @param name
+  /// @param val
   inline void uniform(const char *name, const glm::vec4 &val);
+
+  /// @brief Set the given uniform to the given value
+  ///
+  /// @param name
+  /// @param val
   inline void uniform(const char *name, const glm::mat2 &val);
+
+  /// @brief Set the given uniform to the given value
+  ///
+  /// @param name
+  /// @param val
   inline void uniform(const char *name, const glm::mat3 &val);
+
+  /// @brief Set the given uniform to the given value
+  ///
+  /// @param name
+  /// @param val
   inline void uniform(const char *name, const glm::mat4 &val);
 
 protected:

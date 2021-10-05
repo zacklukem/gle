@@ -9,6 +9,8 @@
 
 GLE_NAMESPACE_BEGIN
 
+/// @brief An object in a scene
+///
 class Object {
 public:
   /// @brief Construct a new Object object
@@ -78,6 +80,9 @@ public:
   /// @param value
   inline void rotation(const glm::quat &value);
 
+  /// @brief get the model matrix for this object
+  ///
+  /// @return const glm::mat4&
   inline const glm::mat4 &model_matrix() const;
 
 private:

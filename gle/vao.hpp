@@ -7,6 +7,8 @@
 
 GLE_NAMESPACE_BEGIN
 
+/// @brief A VAO object
+///
 class VAO {
 public:
   VAO(VAO &) = delete;
@@ -26,7 +28,7 @@ public:
   ///
   inline void bind();
 
-  /// @brief Attribute #vbo to this VAO
+  /// @brief Attribute vbo to this VAO
   ///
   /// @tparam T
   /// @param index

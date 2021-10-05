@@ -77,10 +77,20 @@ static_assert(vbo_value_size<glm::uvec2>::value == 2);
 
 } // namespace __internal__
 
+/// @brief A VBO
+///
+/// @tparam T the type of data stored in this vbo. This can be a float, int, or
+///           glm float vector or glm int vector.
 template <class T> class VBO {
 public:
+  /// @brief the type of OpenGL value stored in this vbo (e.g. GL_FLOAT)
+  ///
   static constexpr GLuint gl_value_type =
       __internal__::vbo_value_type<T>::value;
+
+  /// @brief the number of components per element
+  ///
+  /// For example, a VBO<glm::vec3> has a value size of 3
   static constexpr GLint gl_value_size = __internal__::vbo_value_size<T>::value;
 
   VBO(VBO &) = delete;

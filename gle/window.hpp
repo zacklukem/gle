@@ -78,6 +78,7 @@ public:
 
   /// @brief Initialize the window and enable opengl
   ///
+  /// @exception std::runtime_error thrown if opengl or glfw fail to load
   inline void init();
 
   /// @brief Start the window rendering loop
@@ -125,6 +126,9 @@ public:
   /// @return the internal glfw window
   constexpr GLFWwindow *window();
 
+  /// @brief Set the camera object for this window
+  ///
+  /// @param camera
   inline void set_camera(std::shared_ptr<Camera> camera);
 
 private:

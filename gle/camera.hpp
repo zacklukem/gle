@@ -6,6 +6,8 @@
 
 GLE_NAMESPACE_BEGIN
 
+/// @brief A camera object
+///
 class Camera {
 public:
   /// @brief Construct a new Camera object
