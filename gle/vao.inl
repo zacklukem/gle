@@ -2,7 +2,9 @@ GLE_NAMESPACE_BEGIN
 
 inline VAO::VAO() : handle(0) {}
 
-inline VAO::~VAO() { glDeleteVertexArrays(1, &handle); }
+inline VAO::~VAO() {
+  if (handle) glDeleteVertexArrays(1, &handle);
+}
 inline void VAO::init() { glGenVertexArrays(1, &handle); }
 inline void VAO::bind() { glBindVertexArray(handle); }
 
