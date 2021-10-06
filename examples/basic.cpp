@@ -1,8 +1,13 @@
 #define GLE_VERBOSE
+#include <fstream>
 #include <gle/gle.hpp>
 #include <iostream>
 
 int main() {
+
+  std::fstream teacup("examples/teacup.obj", std::ios_base::in);
+
+  if (!teacup) throw std::runtime_error("teacup.obj not found");
 
   auto window = gle::Window("Basic Example", 720, 480);
 
@@ -11,10 +16,10 @@ int main() {
   auto green_shader =
       std::make_shared<gle::SolidColorShader>(glm::vec3(0.5, 1, 0.5));
 
-  auto cube_mesh = gle::make_cube_mesh();
-  auto cube_object = std::make_shared<gle::Object>(
-      red_shader, cube_mesh, glm::vec3(-3, -1, -2), glm::vec3(0.2, 0.3, 0.1),
-      glm::vec3(1));
+  auto obj_mesh = gle::load_obj(teacup);
+  auto obj_object =
+      std::make_shared<gle::Object>(red_shader, obj_mesh, glm::vec3(-3, -1, -2),
+                                    glm::vec3(0.2, 0.3, 0.1), glm::vec3(1));
 
   auto sphere_mesh = gle::make_ico_sphere_mesh(3);
   auto sphere_object = std::make_shared<gle::Object>(
@@ -23,7 +28,7 @@ int main() {
 
   auto render_pass = std::make_shared<gle::ObjectRenderPass>();
   render_pass->add_object(sphere_object);
-  render_pass->add_object(cube_object);
+  render_pass->add_object(obj_object);
 
   auto camera = std::make_shared<gle::Camera>(
       glm::vec3(5, 5, 5), glm::vec3(0, 1, 0), glm::vec3(0, 0, 0),
