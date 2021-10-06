@@ -14,15 +14,26 @@ find_package(glfw3 REQUIRED)
 
 add_compile_options(-Wall -Wextra -pedantic -Werror)
 
-include_directories(basic PUBLIC glad/include)
-add_library(glad "glad/src/glad.c")
+add_library(glad "thirdparty/glad/src/glad.c")
+target_include_directories(glad PUBLIC thirdparty/glad/include)
 
 set(INCLUDE_DIRECTORIES
 	PUBLIC .
-	PUBLIC ${GLM_INCLUDE_DIR}
-	PUBLIC ${GLFW3_INCLUDE_DIR}
+  PUBLIC thirdparty/glad/include
+	PUBLIC ${GLM_INCLUDE_DIRS}
+	PUBLIC ${GLFW3_INCLUDE_DIRS}
 )
 
+set(LIBS glfw glad)
+
+# Tests
+add_executable(tests tests/main.cpp)
+target_include_directories(tests ${INCLUDE_DIRECTORIES} PUBLIC thirdparty/doctest/doctest/)
+target_link_libraries(tests ${LIBS})
+add_custom_target(test DEPENDS tests)
+add_custom_command(TARGET test COMMAND "bin/tests")
+
+# Examples
 add_executable(basic examples/basic.cpp)
 target_include_directories(basic ${INCLUDE_DIRECTORIES})
-target_link_libraries(basic glfw glad)
+target_link_libraries(basic ${LIBS})
