@@ -9,7 +9,7 @@ inline Mesh::Mesh(std::vector<glm::vec3> vertices,
   calculate_normals();
 }
 
-inline Mesh::Mesh(std::vector<glm::vec3> vertices, std::vector<glm::vec3> uvs,
+inline Mesh::Mesh(std::vector<glm::vec3> vertices, std::vector<glm::vec2> uvs,
                   std::vector<glm::uvec3> triangles)
     : _vertices(vertices), _normals(vertices.size()), _uvs(uvs),
       _triangles(triangles), vertices_vbo(GL_ARRAY_BUFFER, false),
@@ -77,7 +77,7 @@ inline const std::vector<glm::vec3> &Mesh::vertices() const {
 
 inline const std::vector<glm::vec3> &Mesh::normals() const { return _normals; }
 
-inline const std::vector<glm::vec3> &Mesh::uvs() const { return _uvs; }
+inline const std::vector<glm::vec2> &Mesh::uvs() const { return _uvs; }
 
 inline const std::vector<glm::uvec3> &Mesh::triangles() const {
   return _triangles;

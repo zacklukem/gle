@@ -27,7 +27,7 @@ public:
   /// @param vertices
   /// @param uvs
   /// @param triangles
-  inline Mesh(std::vector<glm::vec3> vertices, std::vector<glm::vec3> uvs,
+  inline Mesh(std::vector<glm::vec3> vertices, std::vector<glm::vec2> uvs,
               std::vector<glm::uvec3> triangles);
 
   /// @brief Calculate surface normals
@@ -69,8 +69,8 @@ public:
 
   /// @brief Get the mesh uvs
   ///
-  /// @return const std::vector<glm::vec3>&
-  inline const std::vector<glm::vec3> &uvs() const;
+  /// @return const std::vector<glm::vec2>&
+  inline const std::vector<glm::vec2> &uvs() const;
 
   /// @brief Get the mesh triangles
   ///
@@ -80,11 +80,11 @@ public:
 private:
   std::vector<glm::vec3> _vertices;
   std::vector<glm::vec3> _normals;
-  std::vector<glm::vec3> _uvs;
+  std::vector<glm::vec2> _uvs;
   std::vector<glm::uvec3> _triangles;
   VBO<glm::vec3> vertices_vbo;
   VBO<glm::vec3> normals_vbo;
-  VBO<glm::vec3> uvs_vbo;
+  VBO<glm::vec2> uvs_vbo;
   VBO<glm::uvec3> triangles_vbo;
   VAO vao;
 };
