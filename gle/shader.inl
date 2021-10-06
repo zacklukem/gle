@@ -71,9 +71,9 @@ inline void Shader::load() {
 }
 
 inline void Shader::use(const MVPShaderUniforms &uniforms) {
+  glUseProgram(program);
   on_use();
   uniforms.load(*this);
-  glUseProgram(program);
 }
 
 inline void Shader::uniform(const char *name, float val) {
