@@ -3,6 +3,7 @@ GLE_NAMESPACE_BEGIN
 namespace __internal__ {
 inline void framebuffer_callback(GLFWwindow *window, int width, int height) {
   auto self = (Window *)glfwGetWindowUserPointer(window);
+  GLE_LOG(GLE_INFO, "Window resize: W: %d, H: %d", width, height);
   self->_dimensions.x = width;
   self->_dimensions.y = height;
   glViewport(0, 0, width, height);
@@ -46,6 +47,17 @@ inline void Window::init() {
                              description);
   }
 
+  int actual_width;
+  int actual_height;
+  glfwGetFramebufferSize(window(), &actual_width, &actual_height);
+  if (actual_width != width() || actual_height != height()) {
+    GLE_LOG(GLE_WARN,
+            "Unexpected framebuffer size: W: %d, H: %d, expected: W: %d, H: %d",
+            actual_width, actual_height, width(), height());
+    _dimensions.x = actual_width;
+    _dimensions.y = actual_height;
+  }
+
   glfwSetWindowUserPointer(window(), this);
   glfwMakeContextCurrent(window());
   glfwSetFramebufferSizeCallback(window(), __internal__::framebuffer_callback);
@@ -67,9 +79,7 @@ inline void Window::init() {
 #endif
 
   glViewport(0, 0, width(), height());
-
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-  glEnable(GL_DEPTH_TEST);
   glEnable(GL_DEPTH_TEST);
 
   for (auto pass : render_passes) {
