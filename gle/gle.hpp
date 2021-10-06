@@ -7,6 +7,7 @@
 #include <gle/camera.hpp>
 #include <gle/gl.hpp>
 #include <gle/mesh.hpp>
+#include <gle/meshs/obj.hpp>
 #include <gle/meshs/primitives.hpp>
 #include <gle/object.hpp>
 #include <gle/passes/object_render_pass.hpp>

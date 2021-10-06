@@ -77,6 +77,16 @@ public:
   /// @return const std::vector<glm::uvec3>&
   inline const std::vector<glm::uvec3> &triangles() const;
 
+  /// @brief Set the mesh normals
+  ///
+  /// @param normals
+  inline void normals(const std::vector<glm::vec3> &normals);
+
+  /// @brief Set the mesh uvs
+  ///
+  /// @param uvs
+  inline void uvs(const std::vector<glm::vec2> &uvs);
+
 private:
   std::vector<glm::vec3> _vertices;
   std::vector<glm::vec3> _normals;

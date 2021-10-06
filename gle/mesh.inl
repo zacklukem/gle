@@ -83,4 +83,10 @@ inline const std::vector<glm::uvec3> &Mesh::triangles() const {
   return _triangles;
 }
 
+inline void Mesh::normals(const std::vector<glm::vec3> &normals) {
+  _normals = normals;
+}
+
+inline void Mesh::uvs(const std::vector<glm::vec2> &uvs) { _uvs = uvs; }
+
 GLE_NAMESPACE_END
