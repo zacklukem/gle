@@ -21,6 +21,15 @@ public:
   inline Mesh(std::vector<glm::vec3> vertices,
               std::vector<glm::uvec3> triangles);
 
+  /// @brief Construct a new Mesh object with given triangles, then generate
+  ///        surface normals
+  ///
+  /// @param vertices
+  /// @param uvs
+  /// @param triangles
+  inline Mesh(std::vector<glm::vec3> vertices, std::vector<glm::vec3> uvs,
+              std::vector<glm::uvec3> triangles);
+
   /// @brief Calculate surface normals
   ///
   inline void calculate_normals();
@@ -48,11 +57,31 @@ public:
   /// @return The number of elements
   inline GLsizei num_elements();
 
+  /// @brief Get the mesh vertices
+  ///
+  /// @return const std::vector<glm::vec3>&
+  inline const std::vector<glm::vec3> &vertices() const;
+
+  /// @brief Get the mesh normals
+  ///
+  /// @return const std::vector<glm::vec3>&
+  inline const std::vector<glm::vec3> &normals() const;
+
+  /// @brief Get the mesh uvs
+  ///
+  /// @return const std::vector<glm::vec3>&
+  inline const std::vector<glm::vec3> &uvs() const;
+
+  /// @brief Get the mesh triangles
+  ///
+  /// @return const std::vector<glm::uvec3>&
+  inline const std::vector<glm::uvec3> &triangles() const;
+
 private:
-  std::vector<glm::vec3> vertices;
-  std::vector<glm::vec3> normals;
-  std::vector<glm::vec3> uvs;
-  std::vector<glm::uvec3> triangles;
+  std::vector<glm::vec3> _vertices;
+  std::vector<glm::vec3> _normals;
+  std::vector<glm::vec3> _uvs;
+  std::vector<glm::uvec3> _triangles;
   VBO<glm::vec3> vertices_vbo;
   VBO<glm::vec3> normals_vbo;
   VBO<glm::vec3> uvs_vbo;
