@@ -1,17 +1,57 @@
 
+#include <array>
 #include <glm/gtc/type_ptr.hpp>
 
 GLE_NAMESPACE_BEGIN
 
+constexpr std::size_t MAX_LIGHTS = 20;
+
+namespace __internal__ {
+
+const char *vertex_default_begin = R"(
+#version 410
+
+in vec3 position;
+in vec3 normal;
+in vec2 uv;
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+)";
+
+const char *fragment_default_begin = R"(
+#version 410
+
+out vec4 FragColor;
+
+#define POINT_LIGHT 0
+#define DIRECTIONAL_LIGHT 1
+
+struct Light {
+  uint type;
+  vec3 position;
+  vec3 direction;
+  vec3 attn;
+};
+
+uniform Light lights[20];
+uniform uint num_lights;
+)";
+
+} // namespace __internal__
+
 inline Shader::Shader(const std::string &vertex_source,
                       const std::string &fragment_source)
-    : vertex_source(vertex_source), fragment_source(fragment_source),
+    : vertex_source(__internal__::vertex_default_begin + vertex_source),
+      fragment_source(__internal__::fragment_default_begin + fragment_source),
       geometry_source(std::nullopt) {}
 
 inline Shader::Shader(const std::string &vertex_source,
                       const std::string &fragment_source,
                       const std::string &geometry_source)
-    : vertex_source(vertex_source), fragment_source(fragment_source),
+    : vertex_source(__internal__::vertex_default_begin + vertex_source),
+      fragment_source(__internal__::fragment_default_begin + fragment_source),
       geometry_source(geometry_source) {}
 
 inline Shader::~Shader() {
@@ -70,10 +110,21 @@ inline void Shader::load() {
   }
 }
 
-inline void Shader::use(const MVPShaderUniforms &uniforms,
+inline void Shader::use(const std::vector<std::shared_ptr<Light>> &lights,
+                        const MVPShaderUniforms &uniforms,
                         std::shared_ptr<Material> material) {
   glUseProgram(program);
   on_use();
+  if (lights.size() > MAX_LIGHTS)
+    throw std::runtime_error("number of lights exceeded the max lights");
+  uniform("num_lights", (std::uint32_t)lights.size());
+  for (std::uint32_t i = 0; i < lights.size(); i++) {
+    std::string n = "lights[" + std::to_string(i) + "].";
+    uniform((n + "type").c_str(), lights.at(i)->type);
+    uniform((n + "direction").c_str(), glm::normalize(lights.at(i)->direction));
+    uniform((n + "position").c_str(), lights.at(i)->position);
+    uniform((n + "attn").c_str(), lights.at(i)->attn);
+  }
   uniforms.load(*this);
   material->load(*this);
 }
@@ -81,6 +132,11 @@ inline void Shader::use(const MVPShaderUniforms &uniforms,
 inline void Shader::uniform(const char *name, float val) {
   auto u = glGetUniformLocation(program, name);
   glUniform1f(u, val);
+}
+
+inline void Shader::uniform(const char *name, std::uint32_t val) {
+  auto u = glGetUniformLocation(program, name);
+  glUniform1ui(u, val);
 }
 
 inline void Shader::uniform(const char *name, const glm::vec2 &val) {

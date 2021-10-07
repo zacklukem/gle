@@ -1,11 +1,14 @@
 #ifndef GLE_GLE_HPP
 #define GLE_GLE_HPP
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <gle/fwd.hpp>
 #include <gle/logging.hpp>
 
 #include <gle/camera.hpp>
 #include <gle/gl.hpp>
+#include <gle/light.hpp>
 #include <gle/mesh.hpp>
 #include <gle/meshs/obj.hpp>
 #include <gle/meshs/primitives.hpp>

@@ -2,31 +2,28 @@ GLE_NAMESPACE_BEGIN
 
 namespace __internal__ {
 const char *solid_color_vertex_shader = R"(
-#version 410
-
-in vec3 position;
-in vec3 normal;
-
-out float attn;
-
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+out vec3 frag_normal;
 
 void main() {
-  attn = max(dot(normalize(normal), normalize(vec3(-1.0, -1.0, 0.0))), 0.3);
+  frag_normal = normal;
   gl_Position = projection * view * model * vec4(position, 1.0);
 }
 )";
 const char *solid_color_fragment_shader = R"(
-#version 410
-
-out vec4 FragColor;
-in float attn;
+in vec3 frag_normal;
 
 uniform vec3 color;
 
+vec3 dir_light(in Light light) {
+  return dot(normalize(frag_normal), light.direction)
+             * light.attn;
+}
+
 void main() {
+  vec3 attn = vec3(0.2); // ambient
+  for (uint i = 0; i < num_lights; i++) {
+    attn += dir_light(lights[i]);
+  }
   FragColor = vec4(color * attn, 1.0);
 }
 )";

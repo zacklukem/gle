@@ -52,10 +52,19 @@ auto sphere_object = std::make_shared<gle::Object>(
   /* rotation */ glm::vec3(0),
   /* scale */    glm::vec3(0.7));
 
+// Create a directional light for our scene
+auto light = std::make_shared<gle::Light>(
+  /* type */      gle::DIRECTIONAL_LIGHT,
+  /* position */  glm::vec3(0),
+  /* direction */ glm::vec3(-1, -1, -5),
+  /* color */     glm::vec3(1),
+  /* intensity */ 0.7);
+
 // Create a new render pass using the object render pass to render a list of
 // objects
 auto render_pass = std::make_shared<gle::ObjectRenderPass>();
 render_pass->add_object(sphere_object);
+render_pass->add_light(light);
 
 // Create a camera
 auto camera = std::make_shared<gle::Camera>(

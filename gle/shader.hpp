@@ -3,6 +3,7 @@
 
 #include <gle/common.hpp>
 #include <gle/gl.hpp>
+#include <gle/light.hpp>
 #include <optional>
 #include <string>
 
@@ -84,7 +85,8 @@ public:
   /// @brief Use the shader and load the given uniforms
   ///
   /// @param uniforms
-  inline void use(const MVPShaderUniforms &uniforms,
+  inline void use(const std::vector<std::shared_ptr<Light>> &lights,
+                  const MVPShaderUniforms &uniforms,
                   std::shared_ptr<Material> material);
 
   /// @brief Set the given uniform to the given value
@@ -128,6 +130,12 @@ public:
   /// @param name
   /// @param val
   inline void uniform(const char *name, const glm::mat4 &val);
+
+  /// @brief Set the given uniform to the given value
+  ///
+  /// @param name
+  /// @param val
+  inline void uniform(const char *name, std::uint32_t val);
 
 protected:
   /// @brief Runs when the shader is used
