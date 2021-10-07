@@ -26,8 +26,8 @@ inline void Mesh::calculate_normals() {
 
   for (auto &triangle : _triangles) {
     // xz X xy
-    auto norm = glm::cross(_vertices.at(triangle.x) - _vertices.at(triangle.z),
-                           _vertices.at(triangle.x) - _vertices.at(triangle.y));
+    auto norm = glm::cross(_vertices.at(triangle.x) - _vertices.at(triangle.y),
+                           _vertices.at(triangle.x) - _vertices.at(triangle.z));
     _normals.at(triangle.x) += norm;
     _normals.at(triangle.y) += norm;
     _normals.at(triangle.z) += norm;

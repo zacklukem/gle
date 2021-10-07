@@ -185,7 +185,7 @@ TEST_CASE("make_plane_mesh 1 subdivision") {
   for (auto &normal : mesh->normals()) {
     INFO("norm #: ", i);
     INFO("norm is: ", glm::to_string(normal));
-    CHECK(normal == glm::vec3(0, -1, 0));
+    CHECK(normal == glm::vec3(0, 1, 0));
     i++;
   }
 }
