@@ -18,6 +18,12 @@ inline std::shared_ptr<Mesh> make_cube_mesh();
 /// @return std::shared_ptr<Mesh>
 inline std::shared_ptr<Mesh> make_ico_sphere_mesh(int subdivisions = 0);
 
+/// @brief Create a plane mesh
+///
+/// @param subdivisions the number of grid lines
+/// @return std::shared_ptr<Mesh>
+inline std::shared_ptr<Mesh> make_plane_mesh(int subdivisions = 1);
+
 GLE_NAMESPACE_END
 
 #include "primitives.inl"

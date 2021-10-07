@@ -117,9 +117,37 @@ inline std::shared_ptr<Mesh> make_ico_sphere_mesh(int subdivisions) {
   return std::make_shared<gle::Mesh>(vertices, triangles);
 }
 
+inline std::shared_ptr<Mesh> make_plane_mesh(int subdivisions) {
+  auto vertices = std::vector<glm::vec3>();
+  auto uvs = std::vector<glm::vec2>();
+  auto triangles = std::vector<glm::uvec3>();
+
+  for (int i = 0; i <= subdivisions; i++) {
+    for (int j = 0; j <= subdivisions; j++) {
+      auto uv = glm::vec2((float)i / (float)subdivisions,
+                          (float)j / (float)subdivisions);
+      vertices.push_back(glm::vec3(uv.x, 0, uv.y));
+      uvs.push_back(uv);
+    }
+  }
+
+  for (int i = 0; i < subdivisions; i++) {
+    for (int j = 0; j < subdivisions; j++) {
+      int top_left = i + (j * (subdivisions + 1));
+      int bottom_left = top_left + subdivisions + 1;
+      triangles.push_back(glm::uvec3(top_left, top_left + 1, bottom_left + 1));
+      triangles.push_back(glm::uvec3(top_left, bottom_left + 1, bottom_left));
+    }
+  }
+
+  return std::make_shared<Mesh>(vertices, uvs, triangles);
+}
+
 GLE_NAMESPACE_END
 
 #ifdef GLE_TEST_CASES
+
+#  include <glm/gtx/string_cast.hpp>
 
 TEST_CASE("__internal__::vertex_midpoint finds midpoint") {
   auto vertices = std::vector<glm::vec3>();
@@ -132,6 +160,31 @@ TEST_CASE("__internal__::vertex_midpoint finds midpoint") {
   CHECK(i == 2);
   CHECK(vertices.size() == 3);
   CHECK(vertices.at(i) == glm::vec3(1.5, 1.5, 1.5));
+}
+
+TEST_CASE("make_plane_mesh 1 subdivision") {
+
+  // 0---1
+  // | \ |
+  // 2---3
+
+  auto mesh = gle::make_plane_mesh();
+  CHECK(mesh->vertices().size() == 4);
+  CHECK(mesh->vertices().at(0) == glm::vec3(0, 0, 0));
+  CHECK(mesh->vertices().at(1) == glm::vec3(0, 0, 1));
+  CHECK(mesh->vertices().at(2) == glm::vec3(1, 0, 0));
+  CHECK(mesh->vertices().at(3) == glm::vec3(1, 0, 1));
+  INFO("tri 0 is: ", glm::to_string(mesh->triangles().at(0)));
+  CHECK(mesh->triangles().at(0) == glm::uvec3(0, 1, 3));
+  INFO("tri 1 is: ", glm::to_string(mesh->triangles().at(1)));
+  CHECK(mesh->triangles().at(1) == glm::uvec3(0, 3, 2));
+  int i = 0;
+  for (auto &normal : mesh->normals()) {
+    INFO("norm #: ", i);
+    INFO("norm is: ", glm::to_string(normal));
+    CHECK(normal == glm::vec3(0, -1, 0));
+    i++;
+  }
 }
 
 #endif
