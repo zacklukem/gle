@@ -13,6 +13,8 @@ const char *vertex_default_begin = R"(
 
 in vec3 position;
 in vec3 normal;
+in vec3 tangent;
+in vec3 bitangent;
 in vec2 uv;
 
 uniform mat4 model;
@@ -99,7 +101,9 @@ inline void Shader::load() {
 
   glBindAttribLocation(program, 0, "position");
   glBindAttribLocation(program, 1, "normal");
-  glBindAttribLocation(program, 2, "uv");
+  glBindAttribLocation(program, 2, "tangent");
+  glBindAttribLocation(program, 3, "bitangent");
+  glBindAttribLocation(program, 4, "uv");
 
   glAttachShader(program, vertex_shader);
   glAttachShader(program, fragment_shader);

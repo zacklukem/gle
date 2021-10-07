@@ -2,18 +2,23 @@ GLE_NAMESPACE_BEGIN
 
 inline Mesh::Mesh(std::vector<glm::vec3> vertices,
                   std::vector<glm::uvec3> triangles)
-    : _vertices(vertices), _normals(vertices.size()), _uvs(vertices.size()),
-      _triangles(triangles), vertices_vbo(GL_ARRAY_BUFFER, false),
-      normals_vbo(GL_ARRAY_BUFFER, false), uvs_vbo(GL_ARRAY_BUFFER, false),
+    : _vertices(vertices), _normals(vertices.size()),
+      _tangents(vertices.size()), _bitangents(vertices.size()),
+      _uvs(vertices.size()), _triangles(triangles),
+      vertices_vbo(GL_ARRAY_BUFFER, false), normals_vbo(GL_ARRAY_BUFFER, false),
+      tangents_vbo(GL_ARRAY_BUFFER, false),
+      bitangents_vbo(GL_ARRAY_BUFFER, false), uvs_vbo(GL_ARRAY_BUFFER, false),
       triangles_vbo(GL_ELEMENT_ARRAY_BUFFER, false) {
   calculate_normals();
 }
 
 inline Mesh::Mesh(std::vector<glm::vec3> vertices, std::vector<glm::vec2> uvs,
                   std::vector<glm::uvec3> triangles)
-    : _vertices(vertices), _normals(vertices.size()), _uvs(uvs),
+    : _vertices(vertices), _normals(vertices.size()),
+      _tangents(vertices.size()), _bitangents(vertices.size()), _uvs(uvs),
       _triangles(triangles), vertices_vbo(GL_ARRAY_BUFFER, false),
-      normals_vbo(GL_ARRAY_BUFFER, false), uvs_vbo(GL_ARRAY_BUFFER, false),
+      normals_vbo(GL_ARRAY_BUFFER, false), tangents_vbo(GL_ARRAY_BUFFER, false),
+      bitangents_vbo(GL_ARRAY_BUFFER, false), uvs_vbo(GL_ARRAY_BUFFER, false),
       triangles_vbo(GL_ELEMENT_ARRAY_BUFFER, false) {
   calculate_normals();
 }
@@ -36,6 +41,24 @@ inline void Mesh::calculate_normals() {
   for (auto &normal : _normals) {
     normal = glm::normalize(normal);
   }
+
+  for (auto &triangle : _triangles) {
+    float x1 = _uvs.at(triangle.y).x - _uvs.at(triangle.x).x;
+    float x2 = _uvs.at(triangle.z).x - _uvs.at(triangle.x).x;
+    float y1 = _uvs.at(triangle.y).y - _uvs.at(triangle.x).y;
+    float y2 = _uvs.at(triangle.z).y - _uvs.at(triangle.x).y;
+    auto e_1 = _vertices.at(triangle.y) - _vertices.at(triangle.x);
+    auto e_2 = _vertices.at(triangle.z) - _vertices.at(triangle.x);
+    auto r = 1.0f / (x1 * y2 - y1 * x2);
+    auto t = (e_1 * y2 - e_2 * y1) * r;
+    auto b = (e_2 * x1 - e_1 * x2) * r;
+    _tangents.at(triangle.x) += t;
+    _tangents.at(triangle.y) += t;
+    _tangents.at(triangle.z) += t;
+    _bitangents.at(triangle.x) += b;
+    _bitangents.at(triangle.y) += b;
+    _bitangents.at(triangle.z) += b;
+  }
 }
 
 inline void Mesh::init_buffers() {
@@ -43,11 +66,15 @@ inline void Mesh::init_buffers() {
   vao.bind();
   vertices_vbo.init();
   normals_vbo.init();
+  tangents_vbo.init();
+  bitangents_vbo.init();
   uvs_vbo.init();
   triangles_vbo.init();
 
   vertices_vbo.write(_vertices);
   normals_vbo.write(_normals);
+  tangents_vbo.write(_tangents);
+  bitangents_vbo.write(_bitangents);
   uvs_vbo.write(_uvs);
   triangles_vbo.write(_triangles);
 }
@@ -57,8 +84,12 @@ inline void Mesh::bind_buffers() {
   glEnableVertexAttribArray(0);
   vao.attr(1, normals_vbo);
   glEnableVertexAttribArray(1);
-  vao.attr(2, uvs_vbo);
+  vao.attr(2, tangents_vbo);
   glEnableVertexAttribArray(2);
+  vao.attr(3, bitangents_vbo);
+  glEnableVertexAttribArray(3);
+  vao.attr(4, uvs_vbo);
+  glEnableVertexAttribArray(4);
 
   triangles_vbo.bind();
 }
@@ -67,6 +98,8 @@ inline void Mesh::post_draw() {
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
   glDisableVertexAttribArray(2);
+  glDisableVertexAttribArray(3);
+  glDisableVertexAttribArray(4);
 }
 
 inline GLsizei Mesh::num_elements() { return _triangles.size() * 3; }

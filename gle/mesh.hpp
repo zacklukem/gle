@@ -90,10 +90,14 @@ public:
 private:
   std::vector<glm::vec3> _vertices;
   std::vector<glm::vec3> _normals;
+  std::vector<glm::vec3> _tangents;
+  std::vector<glm::vec3> _bitangents;
   std::vector<glm::vec2> _uvs;
   std::vector<glm::uvec3> _triangles;
   VBO<glm::vec3> vertices_vbo;
   VBO<glm::vec3> normals_vbo;
+  VBO<glm::vec3> tangents_vbo;
+  VBO<glm::vec3> bitangents_vbo;
   VBO<glm::vec2> uvs_vbo;
   VBO<glm::uvec3> triangles_vbo;
   VAO vao;

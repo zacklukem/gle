@@ -8,9 +8,11 @@ GLE_NAMESPACE_BEGIN
 
 struct StandardMaterial : public Material {
   std::shared_ptr<Texture> color;
+  std::shared_ptr<Texture> normal;
   float diffuse;
   float specular;
-  inline StandardMaterial(std::shared_ptr<Texture> color, float diffuse,
+  inline StandardMaterial(std::shared_ptr<Texture> color,
+                          std::shared_ptr<Texture> normal, float diffuse,
                           float specular);
   inline virtual void load(Shader &shader) const override;
 };

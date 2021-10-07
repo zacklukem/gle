@@ -5,6 +5,7 @@
 #include <gle/common.hpp>
 #include <gle/object.hpp>
 #include <gle/render_pass.hpp>
+#include <gle/shaders/debug_shader.hpp>
 #include <memory>
 
 GLE_NAMESPACE_BEGIN
@@ -20,6 +21,9 @@ public:
 private:
   std::vector<std::shared_ptr<Object>> objects;
   std::vector<std::shared_ptr<Light>> lights;
+#ifdef GLE_DEBUG_LINES
+  std::shared_ptr<DebugShader> debug_shader;
+#endif
 };
 
 GLE_NAMESPACE_END
