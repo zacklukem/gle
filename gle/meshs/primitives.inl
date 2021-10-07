@@ -47,6 +47,7 @@ inline std::shared_ptr<Mesh> make_cube_mesh() {
 inline std::shared_ptr<Mesh> make_ico_sphere_mesh(int subdivisions) {
   auto vertices = std::vector<glm::vec3>();
   auto triangles = std::vector<glm::uvec3>();
+  auto uvs = std::vector<glm::vec2>();
 
   auto t = (1.0 + sqrt(5.0)) / 2.0;
 
@@ -112,9 +113,11 @@ inline std::shared_ptr<Mesh> make_ico_sphere_mesh(int subdivisions) {
 
   for (auto &vertex : vertices) {
     vertex = glm::normalize(vertex);
+    uvs.push_back(glm::vec2(0.5 + atan2(vertex.x, vertex.z) / (2 * M_PI),
+                            0.5 - asin(vertex.y) / M_PI));
   }
 
-  return std::make_shared<gle::Mesh>(vertices, triangles);
+  return std::make_shared<gle::Mesh>(vertices, uvs, triangles);
 }
 
 inline std::shared_ptr<Mesh> make_plane_mesh(int subdivisions) {
