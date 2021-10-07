@@ -7,10 +7,6 @@
 
 int main() {
 
-  std::fstream teacup("examples/teacup.obj", std::ios_base::in);
-
-  if (!teacup) throw std::runtime_error("teacup.obj not found");
-
   auto window = gle::Window("Basic Example", 720, 480);
 
   auto solid_shader = std::make_shared<gle::SolidColorShader>();
@@ -24,7 +20,7 @@ int main() {
   auto red_material = std::make_shared<gle::SolidColorMaterial>(
       glm::vec3(1, 0.7, 0.7), 1.0, 1.0);
 
-  auto obj_mesh = gle::load_obj(teacup);
+  auto obj_mesh = gle::load_obj_from_file("examples/teacup.obj");
   auto obj_object = std::make_shared<gle::Object>(
       solid_shader, red_material, obj_mesh, glm::vec3(-3, 0, -2),
       glm::vec3(0, 0, 0), glm::vec3(1));

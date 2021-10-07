@@ -1,6 +1,13 @@
+#include <fstream>
 #include <sstream>
 
 GLE_NAMESPACE_BEGIN
+
+inline std::shared_ptr<Mesh> load_obj_from_file(const std::string &file) {
+  std::ifstream stream(file, std::ios_base::in);
+  if (!stream) throw std::runtime_error("obj file not found");
+  return load_obj(stream);
+}
 
 inline std::shared_ptr<Mesh> load_obj(const std::string &source) {
   auto str = std::stringstream(source);
