@@ -34,15 +34,19 @@ and [GLAD](https://glad.dav1d.de) to use in your project.
 auto window = gle::Window("Basic Example", 720, 480);
 
 // Use a basic solid color shader
-auto green_shader =
-    std::make_shared<gle::SolidColorShader>(glm::vec3(0.5, 1, 0.5));
+auto solid_shader =
+    std::make_shared<gle::SolidColorShader>();
+
+auto red_material =
+    std::make_shared<gle::SolidColorMaterial>(glm::vec3(1, 0, 0));
 
 // Create an ico-sphere mesh with 3 subdivisions
 auto sphere_mesh = gle::make_ico_sphere_mesh(3);
 
 // Create an object with the green shader and the sphere mesh
 auto sphere_object = std::make_shared<gle::Object>(
-  /* shader */   green_shader,
+  /* shader */   solid_shader,
+  /* material */ red_material,
   /* mesh */     sphere_mesh,
   /* position */ glm::vec3(3, 1, 2),
   /* rotation */ glm::vec3(0),
@@ -71,7 +75,7 @@ window.set_camera(camera);
 // Initialize opengl and the glfw window
 window.init();
 // Compile our shader (must be called after window.init())
-green_shader->load();
+solid_shader->load();
 // Start the rendering loop
 window.start();
 
