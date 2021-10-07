@@ -81,6 +81,7 @@ inline void Window::init() {
   glViewport(0, 0, width(), height());
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_FRAMEBUFFER_SRGB);
 
   for (auto pass : render_passes) {
     pass->load();
