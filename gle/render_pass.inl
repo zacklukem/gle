@@ -1,6 +1,6 @@
 GLE_NAMESPACE_BEGIN
 
-inline void RenderPass::do_render(std::shared_ptr<Camera> camera) {
+inline void RenderPass::do_render(std::shared_ptr<const Camera> camera) {
   render(camera);
 }
 

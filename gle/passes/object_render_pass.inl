@@ -8,7 +8,7 @@ inline void ObjectRenderPass::load() {
   }
 }
 
-inline void ObjectRenderPass::render(std::shared_ptr<Camera> camera) {
+inline void ObjectRenderPass::render(std::shared_ptr<const Camera> camera) {
   for (auto object : objects) {
     auto uniforms =
         MVPShaderUniforms(object->model_matrix(), camera->view_matrix(),

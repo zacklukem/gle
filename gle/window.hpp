@@ -136,7 +136,7 @@ private:
   glm::ivec2 _dimensions;
   WindowOptions _options;
   std::vector<std::shared_ptr<RenderPass>> render_passes;
-  std::shared_ptr<Camera> camera;
+  std::shared_ptr<const Camera> camera;
 
   GLFWwindow *_window = nullptr;
   friend inline void __internal__::framebuffer_callback(GLFWwindow *window,

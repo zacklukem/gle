@@ -88,7 +88,7 @@ public:
   inline void use(const std::vector<std::shared_ptr<Light>> &lights,
                   const MVPShaderUniforms &uniforms,
                   std::shared_ptr<Material> material,
-                  std::shared_ptr<Camera> camera);
+                  std::shared_ptr<const Camera> camera);
 
   /// @brief Set the given uniform to the given value
   ///

@@ -14,7 +14,7 @@ public:
   inline void add_object(std::shared_ptr<Object>);
   inline void add_light(std::shared_ptr<Light>);
 
-  virtual void render(std::shared_ptr<Camera> camera) override;
+  virtual void render(std::shared_ptr<const Camera> camera) override;
   virtual void load() override;
 
 private:

@@ -1,7 +1,9 @@
 #define GLE_VERBOSE
+#include <chrono>
 #include <fstream>
 #include <gle/gle.hpp>
 #include <iostream>
+#include <thread>
 
 int main() {
 
@@ -55,10 +57,22 @@ int main() {
       glm::vec3(10, 5, 10), glm::vec3(0, 1, 0), glm::vec3(0, 0, 0),
       720.0f / 480.0f, glm::radians(45.0f), 0.1f, 100.0f);
 
+  auto do_animation = [](std::shared_ptr<gle::Camera> camera) {
+    while (true) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(5));
+      camera->origin(glm::vec3(sin(glfwGetTime() / 2.0) * 10.0, 5.0,
+                               cos(glfwGetTime() / 2.0) * 10.0));
+    }
+  };
+
+  auto animation_thread = std::thread(do_animation, camera);
+  animation_thread.detach();
+
   window.add_render_pass(render_pass);
   window.set_camera(camera);
 
   window.init();
   solid_shader->load();
+
   window.start();
 }

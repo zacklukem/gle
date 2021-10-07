@@ -119,7 +119,7 @@ inline void Shader::load() {
 inline void Shader::use(const std::vector<std::shared_ptr<Light>> &lights,
                         const MVPShaderUniforms &uniforms,
                         std::shared_ptr<Material> material,
-                        std::shared_ptr<Camera> camera) {
+                        std::shared_ptr<const Camera> camera) {
   glUseProgram(program);
   on_use();
   if (lights.size() > MAX_LIGHTS)

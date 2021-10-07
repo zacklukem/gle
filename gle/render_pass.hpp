@@ -15,7 +15,7 @@ public:
 
   /// @brief Render this pass
   ///
-  inline void do_render(std::shared_ptr<Camera> camera);
+  inline void do_render(std::shared_ptr<const Camera> camera);
 
   /// @brief Initialize this pass (called by Window::load() )
   ///
@@ -26,7 +26,7 @@ protected:
   ///
   /// @pure
   /// @param camera
-  virtual void render(std::shared_ptr<Camera> camera) = 0;
+  virtual void render(std::shared_ptr<const Camera> camera) = 0;
 };
 
 GLE_NAMESPACE_END
