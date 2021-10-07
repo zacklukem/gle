@@ -30,7 +30,7 @@ inline void Mesh::calculate_normals() {
                            _vertices.at(triangle.x) - _vertices.at(triangle.y));
     _normals.at(triangle.x) += norm;
     _normals.at(triangle.y) += norm;
-    _normals.at(triangle.y) += norm;
+    _normals.at(triangle.z) += norm;
   }
 
   for (auto &normal : _normals) {
