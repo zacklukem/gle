@@ -20,6 +20,7 @@ target_include_directories(glad PUBLIC thirdparty/glad/include)
 set(INCLUDE_DIRECTORIES
 	PUBLIC .
   PUBLIC thirdparty/glad/include
+  PUBLIC thirdparty/stb
 	PUBLIC ${GLM_INCLUDE_DIRS}
 	PUBLIC ${GLFW3_INCLUDE_DIRS}
 )

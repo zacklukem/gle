@@ -178,6 +178,13 @@ inline void Shader::uniform(const char *name, const glm::mat4 &val) {
   glUniformMatrix4fv(u, 1, GL_FALSE, glm::value_ptr(val));
 }
 
+inline void Shader::uniform(const char *name, GLuint i,
+                            std::shared_ptr<Texture> val) {
+  glActiveTexture(GL_TEXTURE0 + i);
+  val->bind();
+  uniform(name, i);
+}
+
 inline MVPShaderUniforms::MVPShaderUniforms(const glm::mat4 &model,
                                             const glm::mat4 &view,
                                             const glm::mat4 &projection)

@@ -1,3 +1,6 @@
 [submodule "thirdparty/doctest"]
 	path = thirdparty/doctest
 	url = https://github.com/onqtam/doctest.git
+[submodule "thirdparty/stb"]
+	path = thirdparty/stb
+	url = https://github.com/nothings/stb

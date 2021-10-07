@@ -4,6 +4,7 @@
 #include <gle/common.hpp>
 #include <gle/gl.hpp>
 #include <gle/light.hpp>
+#include <gle/texture.hpp>
 #include <optional>
 #include <string>
 
@@ -137,6 +138,13 @@ public:
   /// @param name
   /// @param val
   inline void uniform(const char *name, std::uint32_t val);
+
+  /// @brief Set the given uniform to the given value
+  ///
+  /// @param name
+  /// @param i
+  /// @param val
+  inline void uniform(const char *name, GLuint i, std::shared_ptr<Texture> val);
 
 protected:
   /// @brief Runs when the shader is used

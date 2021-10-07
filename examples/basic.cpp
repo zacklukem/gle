@@ -10,12 +10,15 @@ int main() {
   auto window = gle::Window("Basic Example", 720, 480);
 
   auto solid_shader = std::make_shared<gle::SolidColorShader>();
+  auto standard_shader = std::make_shared<gle::StandardShader>();
 
   auto blue_material = std::make_shared<gle::SolidColorMaterial>(
       glm::vec3(0.7, 0.7, 1), 1.0, 0.2);
 
-  auto green_material = std::make_shared<gle::SolidColorMaterial>(
-      glm::vec3(0.7, 1, 0.7), 1.0, 0.0);
+  auto grass_texture = std::make_shared<gle::Texture>();
+
+  auto grass_material =
+      std::make_shared<gle::StandardMaterial>(grass_texture, 1.0, 0.0);
 
   auto red_material = std::make_shared<gle::SolidColorMaterial>(
       glm::vec3(1, 0.7, 0.7), 1.0, 1.0);
@@ -32,12 +35,12 @@ int main() {
 
   auto plane_mesh = gle::make_plane_mesh(5);
   auto plane_object = std::make_shared<gle::Object>(
-      solid_shader, green_material, plane_mesh, glm::vec3(-10, 0, -10),
+      standard_shader, grass_material, plane_mesh, glm::vec3(-10, 0, -10),
       glm::vec3(0), glm::vec3(20));
 
   auto main_light =
       std::make_shared<gle::Light>(gle::DIRECTIONAL_LIGHT, glm::vec3(0),
-                                   glm::vec3(-1, -1, -5), glm::vec3(1), 0.5);
+                                   glm::vec3(-1, -1, -5), glm::vec3(1), 1.0);
 
   auto other_light = std::make_shared<gle::Light>(
       gle::DIRECTIONAL_LIGHT, glm::vec3(0), glm::vec3(5, -5, 5),
@@ -69,6 +72,8 @@ int main() {
 
   window.init();
   solid_shader->load();
+  standard_shader->load();
+  grass_texture->load("examples/container.jpg");
 
   window.start();
 }

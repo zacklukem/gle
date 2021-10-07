@@ -17,6 +17,8 @@
 #include <gle/render_pass.hpp>
 #include <gle/shader.hpp>
 #include <gle/shaders/solid_color_shader.hpp>
+#include <gle/shaders/standard_shader.hpp>
+#include <gle/texture.hpp>
 #include <gle/vao.hpp>
 #include <gle/vbo.hpp>
 #include <gle/window.hpp>
