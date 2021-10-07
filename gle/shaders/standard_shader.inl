@@ -37,7 +37,7 @@ struct Material {
 
 uniform Material mat;
 
-vec3 dir_light(in Light light, in vec3 view_dir, in vec3 normal) {
+vec3 light(in Light light, in vec3 view_dir, in vec3 normal) {
   vec3 diffuse = max(dot(normal, normalize(light.direction)), 0)
                  * light.attn * mat.diffuse;
   vec3 reflect_dir = reflect(-light.direction, normal);
@@ -54,7 +54,12 @@ void main() {
   normal = normal * 2.0 - 1.0;
   normal = -normalize(tbn * normal);
   for (uint i = 0; i < num_lights; i++) {
-    attn += dir_light(lights[i], view_dir, normal);
+    float point_attn = 1.0;
+    if (lights[i].type == POINT_LIGHT) {
+      float dist = distance(frag_position, lights[i].position);
+      point_attn = 1.0 / (1.0 + dist * dist);
+    }
+    attn += light(lights[i], view_dir, normal) * point_attn;
   }
   FragColor = vec4(texture(mat.color, frag_uv).rgb * attn, 1.0);
 }

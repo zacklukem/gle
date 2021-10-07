@@ -37,7 +37,12 @@ void main() {
   vec3 view_dir = normalize(camera.origin - frag_position);
   vec3 normal = normalize(frag_normal);
   for (uint i = 0; i < num_lights; i++) {
-    attn += dir_light(lights[i], view_dir, normal);
+    float point_attn = 1.0;
+    if (lights[i].type == POINT_LIGHT) {
+      float dist = distance(frag_position, lights[i].position);
+      point_attn = 1.0 / (1.0 + dist * dist);
+    }
+    attn += dir_light(lights[i], view_dir, normal) * point_attn;
   }
   FragColor = vec4(mat.color * attn, 1.0);
 }
