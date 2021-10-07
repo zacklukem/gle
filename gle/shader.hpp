@@ -8,6 +8,16 @@
 
 GLE_NAMESPACE_BEGIN
 
+struct Material {
+  /// @brief Load the material into a shader
+  ///
+  /// @pure
+  /// @param shader
+  inline virtual void load(Shader &shader) const = 0;
+
+  inline virtual ~Material();
+};
+
 /// @brief Structure representing the matrices for model view and projection
 ///
 struct MVPShaderUniforms {
@@ -33,7 +43,7 @@ struct MVPShaderUniforms {
   /// @brief Load the current values into the given shader's uniforms
   ///
   /// @param shader
-  void load(Shader &shader) const;
+  inline void load(Shader &shader) const;
 };
 
 /// @brief A complete shader program including vertex, fragment and geometry
@@ -44,6 +54,8 @@ public:
   Shader(Shader &&other) = delete;
   Shader(const Shader &other) = delete;
   Shader(const Shader &&other) = delete;
+
+  typedef Material material_type;
 
   /// @brief Construct a new Shader object
   ///
@@ -72,7 +84,8 @@ public:
   /// @brief Use the shader and load the given uniforms
   ///
   /// @param uniforms
-  inline void use(const MVPShaderUniforms &uniforms);
+  inline void use(const MVPShaderUniforms &uniforms,
+                  std::shared_ptr<Material> material);
 
   /// @brief Set the given uniform to the given value
   ///

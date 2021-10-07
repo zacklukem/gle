@@ -13,27 +13,33 @@ GLE_NAMESPACE_BEGIN
 ///
 class Object {
 public:
-  /// @brief Construct a new Object object
+  /// @brief Construct a new Object using the given material and shader
   ///
-  /// @param shader
-  /// @param mesh
-  inline Object(std::shared_ptr<Shader> shader, std::shared_ptr<Mesh> mesh);
-
-  /// @brief Construct a new Object object
+  /// The S type must be extend gle::Shader, and the M type must extend
+  /// gle::Material.  S::material_type must be the same as M::material_type
   ///
+  /// @tparam S The shader type
+  /// @tparam M The material type
   /// @param shader
+  /// @param material
   /// @param mesh
   /// @param position
   /// @param rotation
   /// @param scale
-  inline Object(std::shared_ptr<Shader> shader, std::shared_ptr<Mesh> mesh,
-                const glm::vec3 &position, const glm::quat &rotation,
-                const glm::vec3 &scale);
+  template <class S, class M>
+  inline Object(std::shared_ptr<S> shader, std::shared_ptr<M> material,
+                std::shared_ptr<Mesh> mesh, const glm::vec3 &position,
+                const glm::quat &rotation, const glm::vec3 &scale);
 
   /// @brief Get the object's shader
   ///
   /// @return the object's shader
   inline std::shared_ptr<Shader> shader();
+
+  /// @brief Get the objet's material
+  ///
+  /// @return the object's material
+  inline std::shared_ptr<Material> material();
 
   /// @brief Get the object's mesh
   ///
@@ -88,6 +94,7 @@ public:
 private:
   inline void update_model_matrix();
   std::shared_ptr<Shader> _shader;
+  std::shared_ptr<Material> _material;
   std::shared_ptr<Mesh> _mesh;
   glm::vec3 _position;
   glm::vec3 _scale;

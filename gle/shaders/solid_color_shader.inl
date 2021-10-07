@@ -31,12 +31,15 @@ void main() {
 }
 )";
 } // namespace __internal__
+inline SolidColorMaterial::SolidColorMaterial(const glm::vec3 &color)
+    : color(color) {}
 
-inline SolidColorShader::SolidColorShader(const glm::vec3 &color)
+inline void SolidColorMaterial::load(Shader &shader) const {
+  shader.uniform("color", color);
+}
+
+inline SolidColorShader::SolidColorShader()
     : Shader(__internal__::solid_color_vertex_shader,
-             __internal__::solid_color_fragment_shader),
-      color(color) {}
-
-inline void SolidColorShader::on_use() { uniform("color", color); }
+             __internal__::solid_color_fragment_shader) {}
 
 GLE_NAMESPACE_END

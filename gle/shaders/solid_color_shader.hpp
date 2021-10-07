@@ -6,13 +6,17 @@
 
 GLE_NAMESPACE_BEGIN
 
+struct SolidColorMaterial : public Material {
+  glm::vec3 color;
+  inline SolidColorMaterial(const glm::vec3 &color);
+  inline virtual void load(Shader &shader) const override;
+};
+
 class SolidColorShader : public Shader {
 public:
-  inline SolidColorShader(const glm::vec3 &color);
-  inline virtual void on_use() override;
+  typedef SolidColorMaterial material_type;
 
-private:
-  glm::vec3 color;
+  inline SolidColorShader();
 };
 
 GLE_NAMESPACE_END

@@ -14,7 +14,7 @@ inline void ObjectRenderPass::render(std::shared_ptr<Camera> camera) {
         MVPShaderUniforms(object->model_matrix(), camera->view_matrix(),
                           camera->projection_matrix());
 
-    object->shader()->use(uniforms);
+    object->shader()->use(uniforms, object->material());
     object->mesh()->bind_buffers();
 
     glDrawElements(GL_TRIANGLES, object->mesh()->num_elements(),

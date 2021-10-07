@@ -70,10 +70,12 @@ inline void Shader::load() {
   }
 }
 
-inline void Shader::use(const MVPShaderUniforms &uniforms) {
+inline void Shader::use(const MVPShaderUniforms &uniforms,
+                        std::shared_ptr<Material> material) {
   glUseProgram(program);
   on_use();
   uniforms.load(*this);
+  material->load(*this);
 }
 
 inline void Shader::uniform(const char *name, float val) {
@@ -123,5 +125,7 @@ inline void MVPShaderUniforms::load(Shader &shader) const {
 }
 
 inline void Shader::on_use() {}
+
+inline Material::~Material() {}
 
 GLE_NAMESPACE_END

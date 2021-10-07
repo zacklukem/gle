@@ -11,20 +11,23 @@ int main() {
 
   auto window = gle::Window("Basic Example", 720, 480);
 
-  auto red_shader =
-      std::make_shared<gle::SolidColorShader>(glm::vec3(1, 0.5, 0.5));
-  auto green_shader =
-      std::make_shared<gle::SolidColorShader>(glm::vec3(0.5, 1, 0.5));
+  auto solid_shader = std::make_shared<gle::SolidColorShader>();
+
+  auto green_material =
+      std::make_shared<gle::SolidColorMaterial>(glm::vec3(0, 0, 1));
+
+  auto red_material =
+      std::make_shared<gle::SolidColorMaterial>(glm::vec3(1, 0, 0));
 
   auto obj_mesh = gle::load_obj(teacup);
-  auto obj_object =
-      std::make_shared<gle::Object>(red_shader, obj_mesh, glm::vec3(-3, -1, -2),
-                                    glm::vec3(0.2, 0.3, 0.1), glm::vec3(1));
+  auto obj_object = std::make_shared<gle::Object>(
+      solid_shader, red_material, obj_mesh, glm::vec3(-3, -1, -2),
+      glm::vec3(0.2, 0.3, 0.1), glm::vec3(1));
 
   auto sphere_mesh = gle::make_ico_sphere_mesh(3);
   auto sphere_object = std::make_shared<gle::Object>(
-      green_shader, sphere_mesh, glm::vec3(3, 1, 2), glm::vec3(0),
-      glm::vec3(0.7));
+      solid_shader, green_material, sphere_mesh, glm::vec3(3, 1, 2),
+      glm::vec3(0), glm::vec3(0.7));
 
   auto render_pass = std::make_shared<gle::ObjectRenderPass>();
   render_pass->add_object(sphere_object);
@@ -38,7 +41,6 @@ int main() {
   window.set_camera(camera);
 
   window.init();
-  green_shader->load();
-  red_shader->load();
+  solid_shader->load();
   window.start();
 }
