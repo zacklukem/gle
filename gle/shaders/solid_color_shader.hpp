@@ -8,7 +8,10 @@ GLE_NAMESPACE_BEGIN
 
 struct SolidColorMaterial : public Material {
   glm::vec3 color;
-  inline SolidColorMaterial(const glm::vec3 &color);
+  float diffuse;
+  float specular;
+  inline SolidColorMaterial(const glm::vec3 &color, float diffuse,
+                            float specular);
   inline virtual void load(Shader &shader) const override;
 };
 

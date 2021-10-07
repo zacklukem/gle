@@ -35,6 +35,12 @@ struct Light {
   vec3 attn;
 };
 
+struct Camera {
+  vec3 origin;
+  vec3 direction;
+};
+
+uniform Camera camera;
 uniform Light lights[20];
 uniform uint num_lights;
 )";
@@ -112,7 +118,8 @@ inline void Shader::load() {
 
 inline void Shader::use(const std::vector<std::shared_ptr<Light>> &lights,
                         const MVPShaderUniforms &uniforms,
-                        std::shared_ptr<Material> material) {
+                        std::shared_ptr<Material> material,
+                        std::shared_ptr<Camera> camera) {
   glUseProgram(program);
   on_use();
   if (lights.size() > MAX_LIGHTS)
@@ -125,6 +132,8 @@ inline void Shader::use(const std::vector<std::shared_ptr<Light>> &lights,
     uniform((n + "position").c_str(), lights.at(i)->position);
     uniform((n + "attn").c_str(), lights.at(i)->attn);
   }
+  uniform("camera.origin", camera->origin());
+  uniform("camera.direction", camera->direction());
   uniforms.load(*this);
   material->load(*this);
 }

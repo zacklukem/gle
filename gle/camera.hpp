@@ -25,12 +25,27 @@ public:
   /// @brief get the camera view matrix
   ///
   /// @return const glm::mat4&
-  inline const glm::mat4 &view_matrix();
+  inline const glm::mat4 &view_matrix() const;
 
   /// @brief get the camera projection matrix
   ///
   /// @return const glm::mat4&
-  inline const glm::mat4 &projection_matrix();
+  inline const glm::mat4 &projection_matrix() const;
+
+  /// @brief get the camera direction
+  ///
+  /// @return glm::vec3
+  inline glm::vec3 direction() const;
+
+  /// @brief get the camera origin
+  ///
+  /// @return const glm::vec3&
+  inline const glm::vec3 &origin() const;
+
+  /// @brief set the camera origin
+  ///
+  /// @param origin
+  inline void origin(const glm::vec3 &origin);
 
 private:
   inline void update_view_projection();
@@ -42,9 +57,9 @@ private:
   float z_near;
   float z_far;
 
-  glm::vec3 origin;
-  glm::vec3 up;
-  glm::vec3 target;
+  glm::vec3 _origin;
+  glm::vec3 _up;
+  glm::vec3 _target;
 };
 
 GLE_NAMESPACE_END
