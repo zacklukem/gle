@@ -16,6 +16,7 @@ struct Material {
   /// @pure
   /// @param shader
   inline virtual void load(const Shader &shader) const = 0;
+  inline virtual void preload(const Shader &shader) const;
 
   inline virtual ~Material();
 };
@@ -138,6 +139,12 @@ public:
   /// @param name
   /// @param val
   inline void uniform(const char *name, std::uint32_t val) const;
+
+  /// @brief Set the given uniform to the given value
+  ///
+  /// @param name
+  /// @param val
+  inline void uniform(const char *name, std::int32_t val) const;
 
   /// @brief Set the given uniform to the given value
   ///

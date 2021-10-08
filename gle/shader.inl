@@ -125,6 +125,7 @@ inline void Shader::use(const std::vector<std::shared_ptr<Light>> &lights,
                         const MVPShaderUniforms &uniforms,
                         std::shared_ptr<const Material> material,
                         std::shared_ptr<const Camera> camera) const {
+  material->preload(*this);
   glUseProgram(program);
   on_use();
   if (lights.size() > MAX_LIGHTS)
@@ -151,6 +152,11 @@ inline void Shader::uniform(const char *name, float val) const {
 inline void Shader::uniform(const char *name, std::uint32_t val) const {
   auto u = glGetUniformLocation(program, name);
   glUniform1ui(u, val);
+}
+
+inline void Shader::uniform(const char *name, std::int32_t val) const {
+  auto u = glGetUniformLocation(program, name);
+  glUniform1i(u, val);
 }
 
 inline void Shader::uniform(const char *name, const glm::vec2 &val) const {
@@ -184,10 +190,11 @@ inline void Shader::uniform(const char *name, const glm::mat4 &val) const {
 }
 
 inline void Shader::uniform(const char *name, GLuint i,
-                            std::shared_ptr<Texture> val) const {
+                            std::shared_ptr<Texture> tex) const {
+
   glActiveTexture(GL_TEXTURE0 + i);
-  val->bind();
-  uniform(name, i);
+  tex->bind();
+  uniform(name, (GLint)i);
 }
 
 inline MVPShaderUniforms::MVPShaderUniforms(const glm::mat4 &model,
@@ -202,6 +209,7 @@ inline void MVPShaderUniforms::load(const Shader &shader) const {
 }
 
 inline void Shader::on_use() const {}
+inline void Material::preload(const Shader &) const {};
 
 inline Material::~Material() {}
 

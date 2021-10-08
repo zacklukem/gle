@@ -12,8 +12,8 @@ int main() {
   auto solid_shader = std::make_shared<gle::SolidColorShader>();
   auto standard_shader = std::make_shared<gle::StandardShader>();
 
-  auto brick_color_texture = std::make_shared<gle::Texture>();
-  auto brick_normal_texture = std::make_shared<gle::Texture>();
+  auto brick_color_texture = std::make_shared<gle::ImageTexture>();
+  auto brick_normal_texture = std::make_shared<gle::ImageTexture>();
 
   auto brick_material = std::make_shared<gle::StandardMaterial>(
       brick_color_texture, brick_normal_texture, 1.0, 1.0);
@@ -38,7 +38,7 @@ int main() {
 
   auto main_light =
       std::make_shared<gle::Light>(gle::DIRECTIONAL_LIGHT, glm::vec3(0),
-                                   glm::vec3(5, 10, 5), glm::vec3(1), 1.0);
+                                   glm::vec3(5, 5, 5), glm::vec3(1), 1.0);
 
   auto other_light = std::make_shared<gle::Light>(
       gle::POINT_LIGHT, glm::vec3(-3, 0, -4), glm::vec3(-5, 5, -5),
@@ -61,7 +61,9 @@ int main() {
   window.add_render_pass(render_pass);
 
   window.init(scene);
+  brick_color_texture->init();
   brick_color_texture->load("examples/col.jpg");
+  brick_normal_texture->init();
   brick_normal_texture->load("examples/norm.jpg");
 
   auto do_animation = [](std::shared_ptr<gle::Camera> camera) {

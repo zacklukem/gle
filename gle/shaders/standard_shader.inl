@@ -28,9 +28,10 @@ in vec2 frag_uv;
 
 in mat3 tbn;
 
+uniform sampler2D color_tex;
+uniform sampler2D normal_tex;
+
 struct Material {
-  sampler2D color;
-  sampler2D normal;
   float diffuse;
   float specular;
 };
@@ -50,9 +51,9 @@ void main() {
   vec3 attn = vec3(0.1); // ambient
   vec3 view_dir = normalize(camera.origin - frag_position);
   // vec3 normal = normalize(frag_normal);
-  vec3 normal = texture(mat.normal, frag_uv).rgb;
+  vec3 normal = texture(normal_tex, frag_uv).rgb;
   normal = normal * 2.0 - 1.0;
-  normal = -normalize(tbn * normal);
+  normal = normalize(tbn * normal);
   for (uint i = 0; i < num_lights; i++) {
     float point_attn = 1.0;
     if (lights[i].type == POINT_LIGHT) {
@@ -61,7 +62,7 @@ void main() {
     }
     attn += light(lights[i], view_dir, normal) * point_attn;
   }
-  FragColor = vec4(texture(mat.color, frag_uv).rgb * attn, 1.0);
+  FragColor = vec4(texture(color_tex, frag_uv).rgb * attn, 1.0);
 }
 )";
 } // namespace __internal__
@@ -71,9 +72,11 @@ inline StandardMaterial::StandardMaterial(std::shared_ptr<Texture> color,
                                           float diffuse, float specular)
     : color(color), normal(normal), diffuse(diffuse), specular(specular) {}
 
+inline void StandardMaterial::preload(const Shader &) const {}
+
 inline void StandardMaterial::load(const Shader &shader) const {
-  shader.uniform("mat.color", 0, color);
-  shader.uniform("mat.normal", 1, normal);
+  shader.uniform("color_tex", 0, color);
+  shader.uniform("normal_tex", 1, normal);
   shader.uniform("mat.diffuse", diffuse);
   shader.uniform("mat.specular", specular);
 }

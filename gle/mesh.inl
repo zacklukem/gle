@@ -134,6 +134,14 @@ inline void Mesh::normals(const std::vector<glm::vec3> &normals) {
 
 inline void Mesh::uvs(const std::vector<glm::vec2> &uvs) { _uvs = uvs; }
 
+inline void Mesh::draw() const {
+  bind_buffers();
+
+  glDrawElements(GL_TRIANGLES, num_elements(), GL_UNSIGNED_INT, (void *)0);
+
+  post_draw();
+}
+
 GLE_NAMESPACE_END
 
 #ifdef GLE_TEST_CASES

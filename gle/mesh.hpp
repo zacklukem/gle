@@ -43,6 +43,8 @@ public:
   ///
   inline void bind_buffers() const;
 
+  inline void draw() const;
+
   /// @brief Called after drawing the mesh elements to clean up vertexes
   ///
   /// ## Example:

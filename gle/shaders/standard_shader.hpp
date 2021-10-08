@@ -15,6 +15,7 @@ struct StandardMaterial : public Material {
                           std::shared_ptr<Texture> normal, float diffuse,
                           float specular);
   inline virtual void load(const Shader &shader) const override;
+  inline virtual void preload(const Shader &shader) const override;
 };
 
 class StandardShader : public Shader {

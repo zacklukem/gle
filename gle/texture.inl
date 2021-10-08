@@ -60,28 +60,42 @@ inline ImageData::ImageData(uint8_t *data, size_t width, size_t height,
 
 inline ImageData::~ImageData() { stbi_image_free(data); }
 
-inline void Texture::load(const std::string &file) {
+inline ImageTexture::ImageTexture(const TextureOptions &options)
+    : Texture(options) {}
+
+inline void ImageTexture::load(const std::string &file) {
   auto stream = std::ifstream(file, std::ios_base::in);
   load(stream);
 }
 
-inline void Texture::load(std::istream &stream) {
-  auto image = ImageReader(stream).read();
-  glGenTextures(1, &handle);
+inline void ImageTexture::load(std::istream &stream) {
   bind();
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                  GL_LINEAR_MIPMAP_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  auto image = ImageReader(stream).read();
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGB,
                GL_UNSIGNED_BYTE, image.data);
+
   glGenerateMipmap(GL_TEXTURE_2D);
+}
+
+inline void Texture::init() {
+  glGenTextures(1, &handle);
+  bind();
+  if (options.wrap_s)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  if (options.wrap_t)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  if (options.min_filter)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                    GL_LINEAR_MIPMAP_LINEAR);
+  if (options.mag_filter)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
 inline void Texture::bind() const { glBindTexture(GL_TEXTURE_2D, handle); }
 
+inline Texture::Texture(const TextureOptions &options)
+    : options(options), handle(0) {}
 inline Texture::~Texture() { glDeleteTextures(1, &handle); }
 
 GLE_NAMESPACE_END

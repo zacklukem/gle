@@ -21,6 +21,13 @@ struct ImageData {
   size_t num_channels;
 };
 
+struct TextureOptions {
+  GLint wrap_s = 0;
+  GLint wrap_t = 0;
+  GLint min_filter = 0;
+  GLint mag_filter = 0;
+};
+
 class ImageReader {
 public:
   inline ImageReader(std::istream &stream);
@@ -38,13 +45,27 @@ private:
 
 class Texture {
 public:
-  inline void load(const std::string &file);
-  inline void load(std::istream &stream);
+  inline Texture(const TextureOptions &options);
+  inline void init();
   inline void bind() const;
   inline ~Texture();
 
 private:
+  TextureOptions options;
   GLuint handle;
+};
+
+class ImageTexture : public Texture {
+public:
+  static constexpr TextureOptions default_options =
+      TextureOptions{.wrap_s = GL_REPEAT,
+                     .wrap_t = GL_REPEAT,
+                     .min_filter = GL_LINEAR_MIPMAP_LINEAR,
+                     .mag_filter = GL_LINEAR};
+
+  inline ImageTexture(const TextureOptions &options = default_options);
+  inline void load(const std::string &file);
+  inline void load(std::istream &stream);
 };
 
 GLE_NAMESPACE_END
