@@ -8,7 +8,7 @@ GLE_NAMESPACE_BEGIN
 
 class DebugMaterial : public Material {
 public:
-  inline virtual void load(Shader &shader) const override;
+  inline virtual void load(const Shader &shader) const override;
 };
 
 class DebugShader : public Shader {

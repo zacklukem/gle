@@ -15,7 +15,7 @@ struct Material {
   ///
   /// @pure
   /// @param shader
-  inline virtual void load(Shader &shader) const = 0;
+  inline virtual void load(const Shader &shader) const = 0;
 
   inline virtual ~Material();
 };
@@ -45,7 +45,7 @@ struct MVPShaderUniforms {
   /// @brief Load the current values into the given shader's uniforms
   ///
   /// @param shader
-  inline void load(Shader &shader) const;
+  inline void load(const Shader &shader) const;
 };
 
 /// @brief A complete shader program including vertex, fragment and geometry
@@ -88,68 +88,71 @@ public:
   /// @param uniforms
   inline void use(const std::vector<std::shared_ptr<Light>> &lights,
                   const MVPShaderUniforms &uniforms,
-                  std::shared_ptr<Material> material,
-                  std::shared_ptr<const Camera> camera);
+                  std::shared_ptr<const Material> material,
+                  std::shared_ptr<const Camera> camera) const;
 
   /// @brief Set the given uniform to the given value
   ///
   /// @param name
   /// @param val
-  inline void uniform(const char *name, float val);
+  inline void uniform(const char *name, float val) const;
 
   /// @brief Set the given uniform to the given value
   ///
   /// @param name
   /// @param val
-  inline void uniform(const char *name, const glm::vec2 &val);
+  inline void uniform(const char *name, const glm::vec2 &val) const;
 
   /// @brief Set the given uniform to the given value
   ///
   /// @param name
   /// @param val
-  inline void uniform(const char *name, const glm::vec3 &val);
+  inline void uniform(const char *name, const glm::vec3 &val) const;
 
   /// @brief Set the given uniform to the given value
   ///
   /// @param name
   /// @param val
-  inline void uniform(const char *name, const glm::vec4 &val);
+  inline void uniform(const char *name, const glm::vec4 &val) const;
 
   /// @brief Set the given uniform to the given value
   ///
   /// @param name
   /// @param val
-  inline void uniform(const char *name, const glm::mat2 &val);
+  inline void uniform(const char *name, const glm::mat2 &val) const;
 
   /// @brief Set the given uniform to the given value
   ///
   /// @param name
   /// @param val
-  inline void uniform(const char *name, const glm::mat3 &val);
+  inline void uniform(const char *name, const glm::mat3 &val) const;
 
   /// @brief Set the given uniform to the given value
   ///
   /// @param name
   /// @param val
-  inline void uniform(const char *name, const glm::mat4 &val);
+  inline void uniform(const char *name, const glm::mat4 &val) const;
 
   /// @brief Set the given uniform to the given value
   ///
   /// @param name
   /// @param val
-  inline void uniform(const char *name, std::uint32_t val);
+  inline void uniform(const char *name, std::uint32_t val) const;
 
   /// @brief Set the given uniform to the given value
   ///
   /// @param name
   /// @param i
   /// @param val
-  inline void uniform(const char *name, GLuint i, std::shared_ptr<Texture> val);
+  inline void uniform(const char *name, GLuint i,
+                      std::shared_ptr<Texture> val) const;
+
+  inline bool is_loaded() const;
 
 protected:
   /// @brief Runs when the shader is used
   ///
-  inline virtual void on_use();
+  inline virtual void on_use() const;
 
 private:
   std::string vertex_source;
@@ -159,6 +162,7 @@ private:
   GLuint vertex_shader;
   GLuint geometry_shader;
   GLuint fragment_shader;
+  bool _is_loaded;
 };
 
 GLE_NAMESPACE_END

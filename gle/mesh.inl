@@ -83,7 +83,7 @@ inline void Mesh::init_buffers() {
   triangles_vbo.write(_triangles);
 }
 
-inline void Mesh::bind_buffers() {
+inline void Mesh::bind_buffers() const {
   vao.attr(0, vertices_vbo);
   glEnableVertexAttribArray(0);
   vao.attr(1, normals_vbo);
@@ -98,7 +98,7 @@ inline void Mesh::bind_buffers() {
   triangles_vbo.bind();
 }
 
-inline void Mesh::post_draw() {
+inline void Mesh::post_draw() const {
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
   glDisableVertexAttribArray(2);
@@ -106,7 +106,7 @@ inline void Mesh::post_draw() {
   glDisableVertexAttribArray(4);
 }
 
-inline GLsizei Mesh::num_elements() { return _triangles.size() * 3; }
+inline GLsizei Mesh::num_elements() const { return _triangles.size() * 3; }
 
 inline const std::vector<glm::vec3> &Mesh::vertices() const {
   return _vertices;

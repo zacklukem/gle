@@ -52,7 +52,7 @@ inline SolidColorMaterial::SolidColorMaterial(const glm::vec3 &color,
                                               float diffuse, float specular)
     : color(color), diffuse(diffuse), specular(specular) {}
 
-inline void SolidColorMaterial::load(Shader &shader) const {
+inline void SolidColorMaterial::load(const Shader &shader) const {
   shader.uniform("mat.color", color);
   shader.uniform("mat.diffuse", diffuse);
   shader.uniform("mat.specular", specular);

@@ -40,7 +40,7 @@ class Texture {
 public:
   inline void load(const std::string &file);
   inline void load(std::istream &stream);
-  inline void bind();
+  inline void bind() const;
   inline ~Texture();
 
 private:

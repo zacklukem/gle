@@ -79,11 +79,11 @@ public:
   /// @brief Initialize the window and enable opengl
   ///
   /// @exception std::runtime_error thrown if opengl or glfw fail to load
-  inline void init();
+  inline void init(std::shared_ptr<Scene> scene);
 
   /// @brief Start the window rendering loop
   ///
-  inline void start();
+  inline void start(std::shared_ptr<const Scene> scene);
 
   // Getters and setters
   /// @brief Add a rendering pass to the end of the render past list
@@ -126,17 +126,11 @@ public:
   /// @return the internal glfw window
   constexpr GLFWwindow *window();
 
-  /// @brief Set the camera object for this window
-  ///
-  /// @param camera
-  inline void set_camera(std::shared_ptr<Camera> camera);
-
 private:
   std::string _name;
   glm::ivec2 _dimensions;
   WindowOptions _options;
   std::vector<std::shared_ptr<RenderPass>> render_passes;
-  std::shared_ptr<const Camera> camera;
 
   GLFWwindow *_window = nullptr;
   friend inline void __internal__::framebuffer_callback(GLFWwindow *window,

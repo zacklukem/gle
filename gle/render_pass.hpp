@@ -3,6 +3,7 @@
 
 #include <gle/common.hpp>
 #include <gle/gl.hpp>
+#include <gle/scene.hpp>
 #include <memory>
 
 GLE_NAMESPACE_BEGIN
@@ -15,18 +16,18 @@ public:
 
   /// @brief Render this pass
   ///
-  inline void do_render(std::shared_ptr<const Camera> camera);
+  inline void do_render(std::shared_ptr<const Scene> scene) const;
 
   /// @brief Initialize this pass (called by Window::load() )
   ///
-  inline virtual void load();
+  inline virtual void load(std::shared_ptr<const Scene> scene);
 
 protected:
   /// @brief Render this pass (implementation)
   ///
   /// @pure
-  /// @param camera
-  virtual void render(std::shared_ptr<const Camera> camera) = 0;
+  /// @param scene
+  virtual void render(std::shared_ptr<const Scene> scene) const = 0;
 };
 
 GLE_NAMESPACE_END

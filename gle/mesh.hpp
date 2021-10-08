@@ -41,7 +41,7 @@ public:
 
   /// @brief Bind the mesh buffers and VAO
   ///
-  inline void bind_buffers();
+  inline void bind_buffers() const;
 
   /// @brief Called after drawing the mesh elements to clean up vertexes
   ///
@@ -50,12 +50,12 @@ public:
   ///     glDrawElements(GL_TRIANGLES, mesh->num_elements(),
   ///                    GL_UNSIGNED_INT, (void *)0);
   ///     mesh->post_draw();
-  inline void post_draw();
+  inline void post_draw() const;
 
   /// @brief Get the number of elements (number of triangles times 3)
   ///
   /// @return The number of elements
-  inline GLsizei num_elements();
+  inline GLsizei num_elements() const;
 
   /// @brief Get the mesh vertices
   ///

@@ -80,7 +80,7 @@ inline void Texture::load(std::istream &stream) {
   glGenerateMipmap(GL_TEXTURE_2D);
 }
 
-inline void Texture::bind() { glBindTexture(GL_TEXTURE_2D, handle); }
+inline void Texture::bind() const { glBindTexture(GL_TEXTURE_2D, handle); }
 
 inline Texture::~Texture() { glDeleteTextures(1, &handle); }
 

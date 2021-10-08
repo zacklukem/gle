@@ -15,6 +15,7 @@
 #include <gle/object.hpp>
 #include <gle/passes/object_render_pass.hpp>
 #include <gle/render_pass.hpp>
+#include <gle/scene.hpp>
 #include <gle/shader.hpp>
 #include <gle/shaders/debug_shader.hpp>
 #include <gle/shaders/solid_color_shader.hpp>

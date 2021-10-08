@@ -71,7 +71,7 @@ inline StandardMaterial::StandardMaterial(std::shared_ptr<Texture> color,
                                           float diffuse, float specular)
     : color(color), normal(normal), diffuse(diffuse), specular(specular) {}
 
-inline void StandardMaterial::load(Shader &shader) const {
+inline void StandardMaterial::load(const Shader &shader) const {
   shader.uniform("mat.color", 0, color);
   shader.uniform("mat.normal", 1, normal);
   shader.uniform("mat.diffuse", diffuse);

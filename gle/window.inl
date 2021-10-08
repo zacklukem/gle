@@ -29,7 +29,7 @@ inline Window::~Window() {
   glfwTerminate();
 }
 
-inline void Window::init() {
+inline void Window::init(std::shared_ptr<Scene> scene) {
   glfwInit();
   glfwWindowHint(GLFW_SAMPLES, options().gl_num_samples);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, options().gl_major_version);
@@ -83,17 +83,19 @@ inline void Window::init() {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_FRAMEBUFFER_SRGB);
 
+  scene->init();
+
   for (auto pass : render_passes) {
-    pass->load();
+    pass->load(scene);
   }
 }
 
-inline void Window::start() {
+inline void Window::start(std::shared_ptr<const Scene> scene) {
   while (!glfwWindowShouldClose(window())) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (auto &pass : render_passes) {
-      pass->do_render(camera);
+      pass->do_render(scene);
     }
 
     glfwSwapBuffers(window());
@@ -116,9 +118,5 @@ constexpr int Window::width() const { return _dimensions.x; }
 constexpr int Window::height() const { return _dimensions.y; }
 
 constexpr GLFWwindow *Window::window() { return _window; }
-
-inline void Window::set_camera(std::shared_ptr<Camera> camera) {
-  this->camera = camera;
-}
 
 GLE_NAMESPACE_END

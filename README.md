@@ -30,8 +30,8 @@ and [GLAD](https://glad.dav1d.de) to use in your project.
 ## Examples
 
 ```cpp
-// Create a 720 by 480px window
-auto window = gle::Window("Basic Example", 720, 480);
+// Setup our scene
+auto scene = std::make_shared<gle::Scene>();
 
 // Use a basic solid color shader
 auto solid_shader =
@@ -60,12 +60,6 @@ auto light = std::make_shared<gle::Light>(
   /* color */     glm::vec3(1),
   /* intensity */ 0.7);
 
-// Create a new render pass using the object render pass to render a list of
-// objects
-auto render_pass = std::make_shared<gle::ObjectRenderPass>();
-render_pass->add_object(sphere_object);
-render_pass->add_light(light);
-
 // Create a camera
 auto camera = std::make_shared<gle::Camera>(
     /* position */ glm::vec3(5, 5, 5),
@@ -76,17 +70,23 @@ auto camera = std::make_shared<gle::Camera>(
     /* z_near */   0.1f,
     /* z_far */    100.0f);
 
+scene->add_object(sphere_object);
+scene->add_light(light);
+scene->camera(camera);
+
+// Create a 720 by 480px window
+auto window = gle::Window("Basic Example", 720, 480);
+
+// Create a new render pass using the object render pass to render a list of
+// objects
+auto render_pass = std::make_shared<gle::ObjectRenderPass>();
 // Add our render pass to the window
 window.add_render_pass(render_pass);
-// Set our camera
-window.set_camera(camera);
 
 // Initialize opengl and the glfw window
-window.init();
-// Compile our shader (must be called after window.init())
-solid_shader->load();
+window.init(scene);
 // Start the rendering loop
-window.start();
+window.start(scene);
 
 // Everything is either a smart pointer or a regular object on the stack, so the
 // destructors are called here and all the OpenGL stuff is cleaned up

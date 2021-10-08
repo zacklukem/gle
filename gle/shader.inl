@@ -53,14 +53,14 @@ inline Shader::Shader(const std::string &vertex_source,
                       const std::string &fragment_source)
     : vertex_source(__internal__::vertex_default_begin + vertex_source),
       fragment_source(__internal__::fragment_default_begin + fragment_source),
-      geometry_source(std::nullopt) {}
+      geometry_source(std::nullopt), _is_loaded(false) {}
 
 inline Shader::Shader(const std::string &vertex_source,
                       const std::string &fragment_source,
                       const std::string &geometry_source)
     : vertex_source(__internal__::vertex_default_begin + vertex_source),
       fragment_source(__internal__::fragment_default_begin + fragment_source),
-      geometry_source(geometry_source) {}
+      geometry_source(geometry_source), _is_loaded(false) {}
 
 inline Shader::~Shader() {
   glDeleteShader(vertex_shader);
@@ -86,6 +86,7 @@ inline void compile_shader(const std::string &source, GLuint shader) {
 } // namespace __internal__
 
 inline void Shader::load() {
+  _is_loaded = true;
   vertex_shader = glCreateShader(GL_VERTEX_SHADER);
   __internal__::compile_shader(vertex_source, vertex_shader);
 
@@ -122,8 +123,8 @@ inline void Shader::load() {
 
 inline void Shader::use(const std::vector<std::shared_ptr<Light>> &lights,
                         const MVPShaderUniforms &uniforms,
-                        std::shared_ptr<Material> material,
-                        std::shared_ptr<const Camera> camera) {
+                        std::shared_ptr<const Material> material,
+                        std::shared_ptr<const Camera> camera) const {
   glUseProgram(program);
   on_use();
   if (lights.size() > MAX_LIGHTS)
@@ -142,48 +143,48 @@ inline void Shader::use(const std::vector<std::shared_ptr<Light>> &lights,
   material->load(*this);
 }
 
-inline void Shader::uniform(const char *name, float val) {
+inline void Shader::uniform(const char *name, float val) const {
   auto u = glGetUniformLocation(program, name);
   glUniform1f(u, val);
 }
 
-inline void Shader::uniform(const char *name, std::uint32_t val) {
+inline void Shader::uniform(const char *name, std::uint32_t val) const {
   auto u = glGetUniformLocation(program, name);
   glUniform1ui(u, val);
 }
 
-inline void Shader::uniform(const char *name, const glm::vec2 &val) {
+inline void Shader::uniform(const char *name, const glm::vec2 &val) const {
   auto u = glGetUniformLocation(program, name);
   glUniform2fv(u, 1, glm::value_ptr(val));
 }
 
-inline void Shader::uniform(const char *name, const glm::vec3 &val) {
+inline void Shader::uniform(const char *name, const glm::vec3 &val) const {
   auto u = glGetUniformLocation(program, name);
   glUniform3fv(u, 1, glm::value_ptr(val));
 }
 
-inline void Shader::uniform(const char *name, const glm::vec4 &val) {
+inline void Shader::uniform(const char *name, const glm::vec4 &val) const {
   auto u = glGetUniformLocation(program, name);
   glUniform4fv(u, 1, glm::value_ptr(val));
 }
 
-inline void Shader::uniform(const char *name, const glm::mat2 &val) {
+inline void Shader::uniform(const char *name, const glm::mat2 &val) const {
   auto u = glGetUniformLocation(program, name);
   glUniformMatrix2fv(u, 1, GL_FALSE, glm::value_ptr(val));
 }
 
-inline void Shader::uniform(const char *name, const glm::mat3 &val) {
+inline void Shader::uniform(const char *name, const glm::mat3 &val) const {
   auto u = glGetUniformLocation(program, name);
   glUniformMatrix3fv(u, 1, GL_FALSE, glm::value_ptr(val));
 }
 
-inline void Shader::uniform(const char *name, const glm::mat4 &val) {
+inline void Shader::uniform(const char *name, const glm::mat4 &val) const {
   auto u = glGetUniformLocation(program, name);
   glUniformMatrix4fv(u, 1, GL_FALSE, glm::value_ptr(val));
 }
 
 inline void Shader::uniform(const char *name, GLuint i,
-                            std::shared_ptr<Texture> val) {
+                            std::shared_ptr<Texture> val) const {
   glActiveTexture(GL_TEXTURE0 + i);
   val->bind();
   uniform(name, i);
@@ -194,14 +195,16 @@ inline MVPShaderUniforms::MVPShaderUniforms(const glm::mat4 &model,
                                             const glm::mat4 &projection)
     : model(model), view(view), projection(projection) {}
 
-inline void MVPShaderUniforms::load(Shader &shader) const {
+inline void MVPShaderUniforms::load(const Shader &shader) const {
   shader.uniform("model", model);
   shader.uniform("view", view);
   shader.uniform("projection", projection);
 }
 
-inline void Shader::on_use() {}
+inline void Shader::on_use() const {}
 
 inline Material::~Material() {}
+
+inline bool Shader::is_loaded() const { return _is_loaded; }
 
 GLE_NAMESPACE_END

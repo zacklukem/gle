@@ -13,8 +13,12 @@ inline Object::Object(std::shared_ptr<S> shader, std::shared_ptr<M> material,
                 "M must be the same as S::material_type");
   update_model_matrix();
 }
+inline std::shared_ptr<const Shader> Object::shader() const { return _shader; }
 inline std::shared_ptr<Shader> Object::shader() { return _shader; }
-inline std::shared_ptr<Material> Object::material() { return _material; }
+inline std::shared_ptr<const Material> Object::material() const {
+  return _material;
+}
+inline std::shared_ptr<const Mesh> Object::mesh() const { return _mesh; }
 inline std::shared_ptr<Mesh> Object::mesh() { return _mesh; }
 
 inline const glm::vec3 &Object::position() const { return _position; }

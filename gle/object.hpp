@@ -36,15 +36,25 @@ public:
   /// @return the object's shader
   inline std::shared_ptr<Shader> shader();
 
+  /// @brief Get the object's shader
+  ///
+  /// @return the object's shader
+  inline std::shared_ptr<const Shader> shader() const;
+
   /// @brief Get the objet's material
   ///
   /// @return the object's material
-  inline std::shared_ptr<Material> material();
+  inline std::shared_ptr<const Material> material() const;
 
   /// @brief Get the object's mesh
   ///
   /// @return the object's mesh
   inline std::shared_ptr<Mesh> mesh();
+
+  /// @brief Get the object's mesh
+  ///
+  /// @return the object's mesh
+  inline std::shared_ptr<const Mesh> mesh() const;
 
   /// @brief get the object's position
   ///

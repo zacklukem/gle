@@ -7,7 +7,7 @@
 
 int main() {
 
-  auto window = gle::Window("Basic Example", 720, 480);
+  auto scene = std::make_shared<gle::Scene>();
 
   auto solid_shader = std::make_shared<gle::SolidColorShader>();
   auto standard_shader = std::make_shared<gle::StandardShader>();
@@ -43,16 +43,26 @@ int main() {
   auto other_light = std::make_shared<gle::Light>(
       gle::POINT_LIGHT, glm::vec3(-3, 0, -4), glm::vec3(-5, 5, -5),
       glm::vec3(0.3, 0.8, 1.0), 3.0);
-  auto render_pass = std::make_shared<gle::ObjectRenderPass>();
-  render_pass->add_object(sphere_object);
-  render_pass->add_object(plane_object);
-  render_pass->add_object(obj_object);
-  render_pass->add_light(main_light);
-  render_pass->add_light(other_light);
+  scene->add_object(sphere_object);
+  scene->add_object(plane_object);
+  scene->add_object(obj_object);
+  scene->add_light(main_light);
+  scene->add_light(other_light);
 
   auto camera = std::make_shared<gle::Camera>(
       glm::vec3(10, 5, 10), glm::vec3(0, 1, 0), glm::vec3(0, 0, 0),
       720.0f / 480.0f, glm::radians(45.0f), 0.1f, 100.0f);
+
+  scene->camera(camera);
+
+  auto window = gle::Window("Basic Example", 720, 480);
+
+  auto render_pass = std::make_shared<gle::ObjectRenderPass>();
+  window.add_render_pass(render_pass);
+
+  window.init(scene);
+  brick_color_texture->load("examples/col.jpg");
+  brick_normal_texture->load("examples/norm.jpg");
 
   auto do_animation = [](std::shared_ptr<gle::Camera> camera) {
     while (true) {
@@ -64,15 +74,5 @@ int main() {
 
   auto animation_thread = std::thread(do_animation, camera);
   animation_thread.detach();
-
-  window.add_render_pass(render_pass);
-  window.set_camera(camera);
-
-  window.init();
-  solid_shader->load();
-  standard_shader->load();
-  brick_color_texture->load("examples/col.jpg");
-  brick_normal_texture->load("examples/norm.jpg");
-
-  window.start();
+  window.start(scene);
 }

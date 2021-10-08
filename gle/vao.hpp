@@ -26,14 +26,14 @@ public:
 
   /// @brief bind this vao
   ///
-  inline void bind();
+  inline void bind() const;
 
   /// @brief Attribute vbo to this VAO
   ///
   /// @tparam T
   /// @param index
   /// @param vbo
-  template <class T> inline void attr(GLuint index, const VBO<T> &vbo);
+  template <class T> inline void attr(GLuint index, const VBO<T> &vbo) const;
 
 private:
   GLuint handle;

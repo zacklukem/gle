@@ -81,7 +81,7 @@ void main() {
 )";
 } // namespace __internal__
 
-inline void DebugMaterial::load(Shader &) const {};
+inline void DebugMaterial::load(const Shader &) const {};
 
 inline DebugShader::DebugShader()
     : Shader(__internal__::debug_vertex_shader,

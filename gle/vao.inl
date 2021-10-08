@@ -6,9 +6,10 @@ inline VAO::~VAO() {
   if (handle) glDeleteVertexArrays(1, &handle);
 }
 inline void VAO::init() { glGenVertexArrays(1, &handle); }
-inline void VAO::bind() { glBindVertexArray(handle); }
+inline void VAO::bind() const { glBindVertexArray(handle); }
 
-template <class T> inline void VAO::attr(GLuint index, const VBO<T> &vbo) {
+template <class T>
+inline void VAO::attr(GLuint index, const VBO<T> &vbo) const {
 
   bind();
   vbo.bind();
