@@ -150,8 +150,6 @@ GLE_NAMESPACE_END
 
 #ifdef GLE_TEST_CASES
 
-#  include <glm/gtx/string_cast.hpp>
-
 TEST_CASE("__internal__::vertex_midpoint finds midpoint") {
   auto vertices = std::vector<glm::vec3>();
 
@@ -177,14 +175,10 @@ TEST_CASE("make_plane_mesh 1 subdivision") {
   CHECK(mesh->vertices().at(1) == glm::vec3(0, 0, 1));
   CHECK(mesh->vertices().at(2) == glm::vec3(1, 0, 0));
   CHECK(mesh->vertices().at(3) == glm::vec3(1, 0, 1));
-  INFO("tri 0 is: ", glm::to_string(mesh->triangles().at(0)));
   CHECK(mesh->triangles().at(0) == glm::uvec3(0, 1, 3));
-  INFO("tri 1 is: ", glm::to_string(mesh->triangles().at(1)));
   CHECK(mesh->triangles().at(1) == glm::uvec3(0, 3, 2));
   int i = 0;
   for (auto &normal : mesh->normals()) {
-    INFO("norm #: ", i);
-    INFO("norm is: ", glm::to_string(normal));
     CHECK(normal == glm::vec3(0, 1, 0));
     i++;
   }

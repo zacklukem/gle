@@ -29,6 +29,10 @@ inline void Mesh::calculate_normals() {
     _normals = std::vector<glm::vec3>(_vertices.size());
   }
 
+  for (auto &normal : _normals) {
+    normal = glm::vec3(0);
+  }
+
   for (auto &triangle : _triangles) {
     // xz X xy
     auto norm = glm::cross(_vertices.at(triangle.x) - _vertices.at(triangle.y),
@@ -110,6 +114,14 @@ inline const std::vector<glm::vec3> &Mesh::vertices() const {
 
 inline const std::vector<glm::vec3> &Mesh::normals() const { return _normals; }
 
+inline const std::vector<glm::vec3> &Mesh::tangents() const {
+  return _tangents;
+}
+
+inline const std::vector<glm::vec3> &Mesh::bitangents() const {
+  return _bitangents;
+}
+
 inline const std::vector<glm::vec2> &Mesh::uvs() const { return _uvs; }
 
 inline const std::vector<glm::uvec3> &Mesh::triangles() const {
@@ -123,3 +135,19 @@ inline void Mesh::normals(const std::vector<glm::vec3> &normals) {
 inline void Mesh::uvs(const std::vector<glm::vec2> &uvs) { _uvs = uvs; }
 
 GLE_NAMESPACE_END
+
+#ifdef GLE_TEST_CASES
+
+#  include <gle/meshs/primitives.hpp>
+
+TEST_CASE("normals calculate fast" * doctest::timeout(0.5) *
+          doctest::may_fail()) {
+  auto mesh = gle::make_ico_sphere_mesh(4);
+
+  INFO("Number of faces: ", mesh->triangles().size());
+  for (int i = 0; i < 50; i++) {
+    mesh->calculate_normals();
+  }
+}
+
+#endif

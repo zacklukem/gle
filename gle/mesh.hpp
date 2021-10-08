@@ -67,6 +67,16 @@ public:
   /// @return const std::vector<glm::vec3>&
   inline const std::vector<glm::vec3> &normals() const;
 
+  /// @brief Get the mesh tangents
+  ///
+  /// @return const std::vector<glm::vec3>&
+  inline const std::vector<glm::vec3> &tangents() const;
+
+  /// @brief Get the mesh bitangents
+  ///
+  /// @return const std::vector<glm::vec3>&
+  inline const std::vector<glm::vec3> &bitangents() const;
+
   /// @brief Get the mesh uvs
   ///
   /// @return const std::vector<glm::vec2>&
