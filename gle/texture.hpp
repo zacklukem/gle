@@ -70,6 +70,4 @@ public:
 
 GLE_NAMESPACE_END
 
-#include "texture.inl"
-
 #endif // GLE_TEXTURE_HPP

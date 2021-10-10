@@ -24,6 +24,4 @@ public:
 
 GLE_NAMESPACE_END
 
-#include "solid_color_shader.inl"
-
 #endif // GLE_SHADERS_SOLID_COLOR_SHADER_HPP

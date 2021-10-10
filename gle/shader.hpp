@@ -4,6 +4,7 @@
 #include <gle/common.hpp>
 #include <gle/gl.hpp>
 #include <gle/light.hpp>
+#include <gle/scene.hpp>
 #include <gle/texture.hpp>
 #include <optional>
 #include <string>
@@ -65,7 +66,8 @@ public:
   /// @param vertex_source
   /// @param fragment_source
   inline Shader(const std::string &vertex_source,
-                const std::string &fragment_source);
+                const std::string &fragment_source,
+                bool include_headers = true);
 
   /// @brief Construct a new Shader object with a geometry shader
   ///
@@ -74,7 +76,8 @@ public:
   /// @param geometry_source
   inline Shader(const std::string &vertex_source,
                 const std::string &fragment_source,
-                const std::string &geometry_source);
+                const std::string &geometry_source,
+                bool include_headers = true);
 
   virtual inline ~Shader();
 
@@ -84,13 +87,14 @@ public:
   /// @exception std::runtime_error thrown if the shader fails to compile
   inline void load();
 
+  inline void use() const;
+
   /// @brief Use the shader and load the given uniforms
   ///
   /// @param uniforms
-  inline void use(const std::vector<std::shared_ptr<Light>> &lights,
+  inline void use(std::shared_ptr<const Scene> scene,
                   const MVPShaderUniforms &uniforms,
-                  std::shared_ptr<const Material> material,
-                  std::shared_ptr<const Camera> camera) const;
+                  std::shared_ptr<const Material> material) const;
 
   /// @brief Set the given uniform to the given value
   ///
@@ -173,7 +177,5 @@ private:
 };
 
 GLE_NAMESPACE_END
-
-#include "shader.inl"
 
 #endif // GLE_SHADER_HPP

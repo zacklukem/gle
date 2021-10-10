@@ -41,6 +41,4 @@ private:
 
 GLE_NAMESPACE_END
 
-#include "vao.inl"
-
 #endif // GLE_VAO_HPP

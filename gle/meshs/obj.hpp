@@ -28,6 +28,4 @@ inline std::shared_ptr<Mesh> load_obj(std::istream &source);
 
 GLE_NAMESPACE_END
 
-#include "obj.inl"
-
 #endif // GLE_MESHS_OBJ_HPP

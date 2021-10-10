@@ -95,6 +95,7 @@ inline void Window::start(std::shared_ptr<const Scene> scene) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (auto &pass : render_passes) {
+      glViewport(0, 0, width(), height());
       pass->do_render(scene);
     }
 

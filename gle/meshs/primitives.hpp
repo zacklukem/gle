@@ -24,8 +24,8 @@ inline std::shared_ptr<Mesh> make_ico_sphere_mesh(int subdivisions = 0);
 /// @return std::shared_ptr<Mesh>
 inline std::shared_ptr<Mesh> make_plane_mesh(int subdivisions = 1);
 
-GLE_NAMESPACE_END
+inline std::shared_ptr<Mesh> make_arrow();
 
-#include "primitives.inl"
+GLE_NAMESPACE_END
 
 #endif // GLE_MESHS_PRIMITIVES_HPP

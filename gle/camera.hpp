@@ -64,6 +64,4 @@ private:
 
 GLE_NAMESPACE_END
 
-#include "camera.inl"
-
 #endif // GLE_CAMERA_HPP

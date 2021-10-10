@@ -2,7 +2,7 @@
 
 GLE_NAMESPACE_BEGIN
 
-inline void ObjectRenderPass::load(std::shared_ptr<const Scene>) {
+inline void ObjectRenderPass::load(std::shared_ptr<Scene>) {
 #ifdef GLE_DEBUG_LINES
   debug_shader = std::make_shared<DebugShader>();
   debug_shader->load();
@@ -15,13 +15,11 @@ inline void ObjectRenderPass::render(std::shared_ptr<const Scene> scene) const {
                                       scene->camera()->view_matrix(),
                                       scene->camera()->projection_matrix());
 
-    object->shader()->use(scene->lights(), uniforms, object->material(),
-                          scene->camera());
+    object->shader()->use(scene, uniforms, object->material());
     object->mesh()->draw();
 
 #ifdef GLE_DEBUG_LINES
-    debug_shader->use(scene->lights(), uniforms, object->material(),
-                      scene->camera());
+    debug_shader->use(scene, uniforms, object->material());
     object->mesh()->draw();
 #endif
   }

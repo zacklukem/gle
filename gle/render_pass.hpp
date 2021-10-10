@@ -20,7 +20,7 @@ public:
 
   /// @brief Initialize this pass (called by Window::load() )
   ///
-  inline virtual void load(std::shared_ptr<const Scene> scene);
+  inline virtual void load(std::shared_ptr<Scene> scene);
 
 protected:
   /// @brief Render this pass (implementation)
@@ -31,7 +31,5 @@ protected:
 };
 
 GLE_NAMESPACE_END
-
-#include "render_pass.inl"
 
 #endif // GLE_RENDER_PASS_HPP

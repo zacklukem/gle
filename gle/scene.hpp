@@ -3,6 +3,7 @@
 
 #include <gle/camera.hpp>
 #include <gle/common.hpp>
+#include <optional>
 
 GLE_NAMESPACE_BEGIN
 
@@ -25,14 +26,22 @@ public:
 
   inline const std::vector<std::shared_ptr<Light>> &lights() const;
 
+  inline std::optional<GLuint> shadow_map() const;
+
+  inline void shadow_map(GLuint tex);
+
+  inline std::optional<glm::mat4> light_space_matrix() const;
+
+  inline void light_space_matrix(const glm::mat4 &mat);
+
 private:
   std::shared_ptr<Camera> _camera;
   std::vector<std::shared_ptr<Object>> _objects;
   std::vector<std::shared_ptr<Light>> _lights;
+  std::optional<GLuint> _shadow_map;
+  std::optional<glm::mat4> _light_space_matrix;
 };
 
 GLE_NAMESPACE_END
-
-#include "scene.inl"
 
 #endif // GLE_SCENE_HPP

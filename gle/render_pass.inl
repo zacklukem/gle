@@ -4,7 +4,7 @@ inline void RenderPass::do_render(std::shared_ptr<const Scene> scene) const {
   render(scene);
 }
 
-inline void RenderPass::load(std::shared_ptr<const Scene>) {}
+inline void RenderPass::load(std::shared_ptr<Scene>) {}
 
 inline RenderPass::~RenderPass() {}
 

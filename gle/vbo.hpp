@@ -102,7 +102,7 @@ public:
   ///
   /// @param type the type of vbo
   /// @param dynamic if the vbo is dynamic
-  constexpr VBO(GLuint type, bool dynamic);
+  inline VBO(GLuint type, bool dynamic);
 
   inline ~VBO();
 
@@ -137,7 +137,5 @@ static_assert(VBO<glm::vec3>::gl_value_type == GL_FLOAT);
 static_assert(VBO<glm::ivec3>::gl_value_type == GL_INT);
 
 GLE_NAMESPACE_END
-
-#include "vbo.inl"
 
 #endif // GLE_VBO_HPP

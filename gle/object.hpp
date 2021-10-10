@@ -115,6 +115,4 @@ private:
 
 GLE_NAMESPACE_END
 
-#include "object.inl"
-
 #endif // GLE_OBJECT_HPP

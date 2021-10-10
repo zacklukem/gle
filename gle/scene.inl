@@ -29,4 +29,16 @@ inline const std::vector<std::shared_ptr<Light>> &Scene::lights() const {
   return _lights;
 }
 
+inline std::optional<GLuint> Scene::shadow_map() const { return _shadow_map; }
+
+inline void Scene::shadow_map(GLuint tex) { _shadow_map = tex; }
+
+inline std::optional<glm::mat4> Scene::light_space_matrix() const {
+  return _light_space_matrix;
+}
+
+inline void Scene::light_space_matrix(const glm::mat4 &mat) {
+  _light_space_matrix = mat;
+}
+
 GLE_NAMESPACE_END

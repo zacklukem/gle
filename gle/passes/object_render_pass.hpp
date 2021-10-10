@@ -14,7 +14,7 @@ GLE_NAMESPACE_BEGIN
 class ObjectRenderPass : public RenderPass {
 public:
   inline virtual void render(std::shared_ptr<const Scene> scene) const override;
-  inline virtual void load(std::shared_ptr<const Scene> scene) override;
+  inline virtual void load(std::shared_ptr<Scene> scene) override;
 
 private:
 #ifdef GLE_DEBUG_LINES
@@ -23,7 +23,5 @@ private:
 };
 
 GLE_NAMESPACE_END
-
-#include "object_render_pass.inl"
 
 #endif // GLE_PASSES_OBJECT_RENDER_PASS_HPP

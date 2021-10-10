@@ -1,7 +1,7 @@
 GLE_NAMESPACE_BEGIN
 
 template <class T>
-constexpr VBO<T>::VBO(GLuint type, bool dynamic)
+inline VBO<T>::VBO(GLuint type, bool dynamic)
     : type(type), handle(0), dynamic(dynamic) {}
 
 template <class T> inline VBO<T>::~VBO() {

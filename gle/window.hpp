@@ -139,6 +139,4 @@ private:
 
 GLE_NAMESPACE_END
 
-#include "window.inl"
-
 #endif // GLE_WINDOW_HPP

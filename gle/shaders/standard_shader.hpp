@@ -27,6 +27,4 @@ public:
 
 GLE_NAMESPACE_END
 
-#include "standard_shader.inl"
-
 #endif // GLE_SHADERS_STANDARD_SHADER_HPP

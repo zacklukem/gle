@@ -146,6 +146,59 @@ inline std::shared_ptr<Mesh> make_plane_mesh(int subdivisions) {
   return std::make_shared<Mesh>(vertices, uvs, triangles);
 }
 
+inline std::shared_ptr<Mesh> make_arrow(float length) {
+  auto vertices = std::vector<glm::vec3>();
+  auto triangles = std::vector<glm::uvec3>();
+
+  // Tip of arrow
+  vertices.push_back(glm::vec3(0, length, 0));
+  const float rim_y = length - 0.2f;
+  const float divisions = 10;
+  const float radius = 0.1;
+  const float shaft_radius = 0.05;
+  const float shaft_top = rim_y;
+  const float turn_angle = (2 * M_PI) / divisions;
+
+  float angle = 0;
+
+  for (int i = 0; i <= divisions; i++) {
+    if (i != divisions)
+      triangles.push_back(glm::uvec3(0, vertices.size(), vertices.size() + 1));
+    vertices.push_back(
+        glm::vec3(radius * sin(angle), rim_y, radius * cos(angle)));
+    angle += turn_angle;
+  }
+
+  angle = 0;
+
+  for (int i = 0; i <= divisions; i++) {
+    // if (i != divisions)
+    //   triangles.push_back(glm::uvec3(0, vertices.size(), vertices.size() +
+    //   1));
+
+    // Top vertex
+    vertices.push_back(glm::vec3(shaft_radius * sin(angle), shaft_top,
+                                 shaft_radius * cos(angle)));
+    // Bottom vertex
+    vertices.push_back(
+        glm::vec3(shaft_radius * sin(angle), 0, shaft_radius * cos(angle)));
+
+    if (i != divisions) {
+      // -2 _ 0
+      //  |\ |
+      // -1_\1
+      triangles.push_back(glm::uvec3(vertices.size() + 1, vertices.size(),
+                                     vertices.size() - 2));
+      triangles.push_back(glm::uvec3(vertices.size() - 1, vertices.size() + 1,
+                                     vertices.size() - 2));
+    }
+
+    angle += turn_angle;
+  }
+
+  return std::make_shared<Mesh>(vertices, triangles);
+}
+
 GLE_NAMESPACE_END
 
 #ifdef GLE_TEST_CASES

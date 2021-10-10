@@ -117,6 +117,4 @@ private:
 
 GLE_NAMESPACE_END
 
-#include "mesh.inl"
-
 #endif // GLE_MESH_HPP

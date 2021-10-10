@@ -20,6 +20,4 @@ public:
 
 GLE_NAMESPACE_END
 
-#include "debug_shader.inl"
-
 #endif // GLE_SHADERS_DEBUG_SHADER_HPP

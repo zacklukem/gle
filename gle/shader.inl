@@ -20,6 +20,7 @@ in vec2 uv;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 light_space_matrix;
 )";
 
 const char *fragment_default_begin = R"(
@@ -42,6 +43,7 @@ struct Camera {
   vec3 direction;
 };
 
+uniform sampler2D shadow_map;
 uniform Camera camera;
 uniform Light lights[20];
 uniform uint num_lights;
@@ -50,16 +52,24 @@ uniform uint num_lights;
 } // namespace __internal__
 
 inline Shader::Shader(const std::string &vertex_source,
-                      const std::string &fragment_source)
-    : vertex_source(__internal__::vertex_default_begin + vertex_source),
-      fragment_source(__internal__::fragment_default_begin + fragment_source),
+                      const std::string &fragment_source, bool include_headers)
+    : vertex_source(include_headers
+                        ? __internal__::vertex_default_begin + vertex_source
+                        : vertex_source),
+      fragment_source(include_headers ? __internal__::fragment_default_begin +
+                                            fragment_source
+                                      : fragment_source),
       geometry_source(std::nullopt), _is_loaded(false) {}
 
 inline Shader::Shader(const std::string &vertex_source,
                       const std::string &fragment_source,
-                      const std::string &geometry_source)
-    : vertex_source(__internal__::vertex_default_begin + vertex_source),
-      fragment_source(__internal__::fragment_default_begin + fragment_source),
+                      const std::string &geometry_source, bool include_headers)
+    : vertex_source(include_headers
+                        ? __internal__::vertex_default_begin + vertex_source
+                        : vertex_source),
+      fragment_source(include_headers ? __internal__::fragment_default_begin +
+                                            fragment_source
+                                      : fragment_source),
       geometry_source(geometry_source), _is_loaded(false) {}
 
 inline Shader::~Shader() {
@@ -121,10 +131,14 @@ inline void Shader::load() {
   }
 }
 
-inline void Shader::use(const std::vector<std::shared_ptr<Light>> &lights,
+inline void Shader::use() const { glUseProgram(program); }
+
+inline void Shader::use(std::shared_ptr<const Scene> scene,
                         const MVPShaderUniforms &uniforms,
-                        std::shared_ptr<const Material> material,
-                        std::shared_ptr<const Camera> camera) const {
+                        std::shared_ptr<const Material> material) const {
+  auto lights = scene->lights();
+  auto camera = scene->camera();
+
   material->preload(*this);
   glUseProgram(program);
   on_use();
@@ -140,6 +154,13 @@ inline void Shader::use(const std::vector<std::shared_ptr<Light>> &lights,
   }
   uniform("camera.origin", camera->origin());
   uniform("camera.direction", camera->direction());
+  if (scene->shadow_map().has_value()) {
+    glActiveTexture(GL_TEXTURE15);
+    glBindTexture(GL_TEXTURE_2D, scene->shadow_map().value());
+    uniform("shadow_map", (GLint)15);
+  }
+  if (scene->light_space_matrix().has_value())
+    uniform("light_space_matrix", scene->light_space_matrix().value());
   uniforms.load(*this);
   material->load(*this);
 }

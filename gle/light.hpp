@@ -21,6 +21,4 @@ struct Light {
 
 GLE_NAMESPACE_END
 
-#include "light.inl"
-
 #endif // GLE_LIGHT_HPP

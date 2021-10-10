@@ -54,7 +54,7 @@ inline void Object::update_model_matrix() {
   auto translate = glm::translate(glm::mat4(1), _position);
   auto scale = glm::scale(glm::mat4(1), _scale);
   auto rotate = glm::toMat4(_rotation);
-  _model = rotate * translate * scale;
+  _model = translate * scale * rotate;
 }
 
 GLE_NAMESPACE_END
