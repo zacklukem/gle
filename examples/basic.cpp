@@ -16,7 +16,9 @@ private:
     FORWARD = 0x1,
     REVERSE = 0x2,
     LEFT = 0x4,
-    RIGHT = 0x8
+    RIGHT = 0x8,
+    UP = 0x10,
+    DOWN = 0x20
   };
 
 private:
@@ -30,20 +32,26 @@ public:
   CameraStateController(std::shared_ptr<gle::Camera> camera) : camera(camera) {}
   void update() override {
     if (state != State::NONE) {
+      auto right = glm::cross(camera->direction(), glm::vec3(0, 1, 0));
+      auto cam_up = glm::cross(camera->direction(), right);
       glm::vec3 movement = glm::vec3(0);
       if (state & State::REVERSE) {
-        movement += -camera->direction() * 0.3f;
+        movement -= camera->direction() * 0.3f;
       }
       if (state & State::FORWARD) {
         movement += camera->direction() * 0.3f;
       }
       if (state & State::RIGHT) {
-        auto right = glm::cross(camera->direction(), glm::vec3(0, 1, 0));
         movement += right * 0.3f;
       }
       if (state & State::LEFT) {
-        auto right = glm::cross(camera->direction(), glm::vec3(0, 1, 0));
-        movement += -right * 0.3f;
+        movement -= right * 0.3f;
+      }
+      if (state & State::UP) {
+        movement -= cam_up * 0.3f;
+      }
+      if (state & State::DOWN) {
+        movement += cam_up * 0.3f;
       }
       camera->origin(camera->origin() + movement);
     }
@@ -58,6 +66,10 @@ public:
       state |= State::LEFT;
     else if (key == GLFW_KEY_D)
       state |= State::RIGHT;
+    else if (key == GLFW_KEY_SPACE)
+      state |= State::UP;
+    else if (key == GLFW_KEY_LEFT_SHIFT)
+      state |= State::DOWN;
   }
 
   inline virtual void key_release(int key, int) override {
@@ -69,6 +81,10 @@ public:
       state &= ~State::LEFT;
     else if (key == GLFW_KEY_D)
       state &= ~State::RIGHT;
+    else if (key == GLFW_KEY_SPACE)
+      state &= ~State::UP;
+    else if (key == GLFW_KEY_LEFT_SHIFT)
+      state &= ~State::DOWN;
   }
 
   inline virtual void mouse_move(double x, double y) override {
