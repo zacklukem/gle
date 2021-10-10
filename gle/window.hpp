@@ -14,9 +14,33 @@
 
 GLE_NAMESPACE_BEGIN
 
+struct RenderLoopTask {
+  inline virtual void update();
+  inline virtual ~RenderLoopTask();
+};
+
+struct KeyboardListener {
+  inline virtual void key_press(int key, int mods);
+  inline virtual void key_repeat(int key, int mods);
+  inline virtual void key_release(int key, int mods);
+  inline virtual ~KeyboardListener();
+};
+
+struct MouseListener {
+  inline virtual void mouse_press(int key, int mods, double x, double y);
+  inline virtual void mouse_release(int key, int mods, double x, double y);
+  inline virtual void mouse_move(double x, double y);
+  inline virtual ~MouseListener();
+};
+
 namespace __internal__ {
 inline void framebuffer_callback(GLFWwindow *window, int width, int height);
-}
+inline void key_callback(GLFWwindow *window, int key, int scancode, int action,
+                         int mods);
+inline void mouse_button_callback(GLFWwindow *window, int button, int action,
+                                  int mods);
+inline void mouse_move_callback(GLFWwindow *window, double x, double y);
+} // namespace __internal__
 
 /// @brief Window options
 ///
@@ -91,6 +115,12 @@ public:
   /// @param pass
   inline void add_render_pass(std::shared_ptr<RenderPass> pass);
 
+  inline void add_keyboard_listener(std::shared_ptr<KeyboardListener> listener);
+
+  inline void add_mouse_listener(std::shared_ptr<MouseListener> listener);
+
+  inline void add_task(std::shared_ptr<RenderLoopTask> task);
+
   /// @brief Get the window options structure
   ///
   /// @return the window options structure
@@ -131,10 +161,21 @@ private:
   glm::ivec2 _dimensions;
   WindowOptions _options;
   std::vector<std::shared_ptr<RenderPass>> render_passes;
+  std::vector<std::shared_ptr<KeyboardListener>> keyboard_listeners;
+  std::vector<std::shared_ptr<MouseListener>> mouse_listeners;
+  std::vector<std::shared_ptr<RenderLoopTask>> render_loop_tasks;
 
   GLFWwindow *_window = nullptr;
   friend inline void __internal__::framebuffer_callback(GLFWwindow *window,
                                                         int width, int height);
+  friend inline void __internal__::key_callback(GLFWwindow *window, int key,
+                                                int scancode, int action,
+                                                int mods);
+  friend inline void __internal__::mouse_button_callback(GLFWwindow *window,
+                                                         int button, int action,
+                                                         int mods);
+  friend inline void __internal__::mouse_move_callback(GLFWwindow *window,
+                                                       double x, double y);
 };
 
 GLE_NAMESPACE_END

@@ -19,8 +19,8 @@ public:
   /// @param fov
   /// @param z_near
   /// @param z_far
-  inline Camera(glm::vec3 origin, glm::vec3 up, glm::vec3 target, float aspect,
-                float fov, float z_near, float z_far);
+  inline Camera(glm::vec3 origin, glm::vec3 up, glm::vec3 direction,
+                float aspect, float fov, float z_near, float z_far);
 
   /// @brief get the camera view matrix
   ///
@@ -35,7 +35,9 @@ public:
   /// @brief get the camera direction
   ///
   /// @return glm::vec3
-  inline glm::vec3 direction() const;
+  inline const glm::vec3 &direction() const;
+
+  inline void direction(const glm::vec3 &direction);
 
   /// @brief get the camera origin
   ///
@@ -59,7 +61,7 @@ private:
 
   glm::vec3 _origin;
   glm::vec3 _up;
-  glm::vec3 _target;
+  glm::vec3 _direction;
 };
 
 GLE_NAMESPACE_END

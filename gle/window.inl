@@ -8,6 +8,54 @@ inline void framebuffer_callback(GLFWwindow *window, int width, int height) {
   self->_dimensions.y = height;
   glViewport(0, 0, width, height);
 }
+
+inline void key_callback(GLFWwindow *window, int key, int, int action,
+                         int mods) {
+  auto self = (Window *)glfwGetWindowUserPointer(window);
+  switch (action) {
+  case GLFW_PRESS:
+    for (auto listener : self->keyboard_listeners) {
+      listener->key_press(key, mods);
+    }
+    break;
+  case GLFW_REPEAT:
+    for (auto listener : self->keyboard_listeners) {
+      listener->key_repeat(key, mods);
+    }
+    break;
+  case GLFW_RELEASE:
+    for (auto listener : self->keyboard_listeners) {
+      listener->key_release(key, mods);
+    }
+    break;
+  }
+}
+
+inline void mouse_button_callback(GLFWwindow *window, int button, int action,
+                                  int mods) {
+  auto self = (Window *)glfwGetWindowUserPointer(window);
+  double x, y;
+  glfwGetCursorPos(window, &x, &y);
+  switch (action) {
+  case GLFW_PRESS:
+    for (auto listener : self->mouse_listeners) {
+      listener->mouse_press(button, mods, x, y);
+    }
+    break;
+  case GLFW_RELEASE:
+    for (auto listener : self->mouse_listeners) {
+      listener->mouse_release(button, mods, x, y);
+    }
+    break;
+  }
+}
+inline void mouse_move_callback(GLFWwindow *window, double x, double y) {
+  auto self = (Window *)glfwGetWindowUserPointer(window);
+  for (auto listener : self->mouse_listeners) {
+    listener->mouse_move(x, y);
+  }
+}
+
 } // namespace __internal__
 
 inline Window::Window(const std::string &name, const glm::ivec2 &dimensions)
@@ -61,6 +109,9 @@ inline void Window::init(std::shared_ptr<Scene> scene) {
   glfwSetWindowUserPointer(window(), this);
   glfwMakeContextCurrent(window());
   glfwSetFramebufferSizeCallback(window(), __internal__::framebuffer_callback);
+  glfwSetKeyCallback(window(), __internal__::key_callback);
+  glfwSetMouseButtonCallback(window(), __internal__::mouse_button_callback);
+  glfwSetCursorPosCallback(window(), __internal__::mouse_move_callback);
 
 #ifdef GLE_VERBOSE
   const char *glfw_version = glfwGetVersionString();
@@ -101,6 +152,9 @@ inline void Window::start(std::shared_ptr<const Scene> scene) {
 
     glfwSwapBuffers(window());
     glfwPollEvents();
+    for (auto task : render_loop_tasks) {
+      task->update();
+    }
   }
 }
 
@@ -119,5 +173,33 @@ constexpr int Window::width() const { return _dimensions.x; }
 constexpr int Window::height() const { return _dimensions.y; }
 
 constexpr GLFWwindow *Window::window() { return _window; }
+
+inline void KeyboardListener::key_press(int, int) {}
+inline void KeyboardListener::key_repeat(int, int) {}
+inline void KeyboardListener::key_release(int, int) {}
+
+inline void
+Window::add_keyboard_listener(std::shared_ptr<KeyboardListener> listener) {
+  keyboard_listeners.push_back(listener);
+}
+
+inline void
+Window::add_mouse_listener(std::shared_ptr<MouseListener> listener) {
+  mouse_listeners.push_back(listener);
+}
+
+inline void Window::add_task(std::shared_ptr<RenderLoopTask> task) {
+  render_loop_tasks.push_back(task);
+}
+
+inline KeyboardListener::~KeyboardListener() {}
+
+inline void MouseListener::mouse_press(int, int, double, double) {}
+inline void MouseListener::mouse_release(int, int, double, double) {}
+inline void MouseListener::mouse_move(double, double) {}
+inline MouseListener::~MouseListener() {}
+
+inline void RenderLoopTask::update() {}
+inline RenderLoopTask::~RenderLoopTask() {}
 
 GLE_NAMESPACE_END

@@ -12,7 +12,10 @@ find_package(OpenGL REQUIRED)
 find_package(glm REQUIRED)
 find_package(glfw3 REQUIRED)
 
-add_compile_options(-Wall -Wextra -pedantic -Werror)
+add_compile_options(
+  -Wall -Wextra -pedantic -Werror -Wno-error=unused-variable
+  -Wno-error=unused-parameter -Wno-error=unused-private-field
+)
 
 add_library(glad "thirdparty/glad/src/glad.c")
 target_include_directories(glad PUBLIC thirdparty/glad/include)
