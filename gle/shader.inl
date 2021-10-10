@@ -21,6 +21,13 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform mat4 light_space_matrix;
+
+struct Camera {
+  vec3 origin;
+  vec3 direction;
+};
+
+uniform Camera camera;
 )";
 
 const char *fragment_default_begin = R"(

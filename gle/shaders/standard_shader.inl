@@ -9,6 +9,10 @@ out vec2 frag_uv;
 
 out mat3 tbn;
 
+out vec3 tangent_light_pos;
+out vec3 tangent_view_pos;
+out vec3 tangent_frag_pos;
+
 void main() {
   frag_uv = uv;
   frag_normal = mat3(transpose(inverse(model))) * normal;
@@ -17,10 +21,14 @@ void main() {
 
   frag_position_light_space = light_space_matrix * vec4(frag_position, 1.0);
 
-  vec3 T = normalize(vec3(model * vec4(tangent,   0.0)));
+  vec3 T = normalize(vec3(model * vec4(tangent, 0.0)));
   vec3 B = normalize(vec3(model * vec4(bitangent, 0.0)));
-  vec3 N = normalize(vec3(model * vec4(normal,    0.0)));
+  vec3 N = normalize(vec3(model * vec4(normal, 0.0)));
   tbn = mat3(T, B, N);
+  mat3 tbn_t = transpose(tbn);
+
+  tangent_view_pos = tbn_t * camera.origin;
+  tangent_frag_pos = tbn_t * frag_position;
 }
 )";
 
@@ -29,11 +37,16 @@ in vec3 frag_normal;
 in vec3 frag_position;
 in vec4 frag_position_light_space;
 in vec2 frag_uv;
+in vec3 tangent_light_pos;
+in vec3 tangent_view_pos;
+in vec3 tangent_frag_pos;
 
 in mat3 tbn;
 
 uniform sampler2D color_tex;
 uniform sampler2D normal_tex;
+uniform sampler2D depth_map;
+uniform float height_scale;
 
 struct Material {
   float diffuse;
@@ -75,11 +88,61 @@ float shadow(in vec3 normal, in vec3 light_dir) {
   return shadow;
 }
 
+vec2 parallax(in vec2 uv, in vec3 view_dir) {
+  // number of depth layers
+  const float min_layers = 8;
+  const float max_layers = 32;
+  float num_layers = mix(max_layers, min_layers, abs(dot(vec3(0.0, 0.0, 1.0),
+                         view_dir)));
+  // calculate the size of each layer
+  float layer_depth = 1.0 / num_layers;
+  // depth of current layer
+  float current_layer_depth = 0.0;
+  // the amount to shift the texture coordinates per layer (from vector P)
+  vec2 p = view_dir.xy / view_dir.z * height_scale;
+  vec2 delta_tex_coords = p / num_layers;
+
+  // get initial values
+  vec2 current_tex_coords = uv;
+  float current_depth_map_value = 1.0
+                                - texture(depth_map, current_tex_coords).r;
+
+  while(current_layer_depth < current_depth_map_value) {
+    // shift texture coordinates along direction of P
+    current_tex_coords -= delta_tex_coords;
+    // get depthmap value at current texture coordinates
+    current_depth_map_value = 1.0 - texture(depth_map, current_tex_coords).r;
+    // get depth of next layer
+    current_layer_depth += layer_depth;
+  }
+
+  // get texture coordinates before collision (reverse operations)
+  vec2 prev_tex_coords = current_tex_coords + delta_tex_coords;
+
+  // get depth after and before collision for linear interpolation
+  float after_depth  = current_depth_map_value - current_layer_depth;
+  float before_depth = (1.0 - texture(depth_map, prev_tex_coords).r)
+                     - current_layer_depth + layer_depth;
+
+  // interpolation of texture coordinates
+  float weight = after_depth / (after_depth - before_depth);
+  vec2 final_tex_coords = prev_tex_coords * weight + current_tex_coords
+                        * (1.0 - weight);
+
+  return final_tex_coords;
+}
+
 void main() {
-  vec3 attn = vec3(0.0);
+  vec3 tangent_view_dir = normalize(tangent_view_pos - tangent_frag_pos);
   vec3 view_dir = normalize(camera.origin - frag_position);
+  vec2 uv = frag_uv;
+  if (height_scale != 0)
+    uv = parallax(frag_uv, tangent_view_dir);
+  if(uv.x > 1.0 || uv.y > 1.0 || uv.x < 0.0 || uv.y < 0.0)
+    discard;
+  vec3 attn = vec3(0.0);
   // vec3 normal = normalize(frag_normal);
-  vec3 normal = texture(normal_tex, frag_uv).rgb;
+  vec3 normal = texture(normal_tex, uv).rgb;
   normal = normal * 2.0 - 1.0;
   normal = normalize(tbn * normal);
   vec3 light_dir = vec3(0);
@@ -95,21 +158,26 @@ void main() {
   }
   attn *= 1.0 - shadow(normalize(frag_normal), light_dir);
   attn += vec3(0.2); // ambient
-  FragColor = vec4(texture(color_tex, frag_uv).rgb * attn, 1.0);
+  FragColor = vec4(texture(color_tex, uv).rgb * attn, 1.0);
 }
 )";
 } // namespace __internal__
 
 inline StandardMaterial::StandardMaterial(std::shared_ptr<Texture> color,
                                           std::shared_ptr<Texture> normal,
-                                          float diffuse, float specular)
-    : color(color), normal(normal), diffuse(diffuse), specular(specular) {}
+                                          std::shared_ptr<Texture> depth_map,
+                                          float height_scale, float diffuse,
+                                          float specular)
+    : color(color), normal(normal), depth_map(depth_map),
+      height_scale(height_scale), diffuse(diffuse), specular(specular) {}
 
 inline void StandardMaterial::preload(const Shader &) const {}
 
 inline void StandardMaterial::load(const Shader &shader) const {
   shader.uniform("color_tex", 0, color);
   shader.uniform("normal_tex", 1, normal);
+  shader.uniform("depth_map", 3, depth_map);
+  shader.uniform("height_scale", height_scale);
   shader.uniform("mat.diffuse", diffuse);
   shader.uniform("mat.specular", specular);
 }

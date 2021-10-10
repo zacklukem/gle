@@ -72,7 +72,10 @@ inline void ImageTexture::load(std::istream &stream) {
   bind();
   auto image = ImageReader(stream).read();
 
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width, image.height, 0, GL_RGB,
+  auto format = GL_RGB;
+  if (image.num_channels == 1) format = GL_RED;
+
+  glTexImage2D(GL_TEXTURE_2D, 0, format, image.width, image.height, 0, format,
                GL_UNSIGNED_BYTE, image.data);
 
   glGenerateMipmap(GL_TEXTURE_2D);

@@ -118,11 +118,13 @@ int main() {
   auto solid_shader = std::make_shared<gle::SolidColorShader>();
   auto standard_shader = std::make_shared<gle::StandardShader>();
 
-  auto brick_color_texture = std::make_shared<gle::ImageTexture>();
-  auto brick_normal_texture = std::make_shared<gle::ImageTexture>();
+  auto stone_color_texture = std::make_shared<gle::ImageTexture>();
+  auto stone_normal_texture = std::make_shared<gle::ImageTexture>();
+  auto stone_disp_texture = std::make_shared<gle::ImageTexture>();
 
-  auto brick_material = std::make_shared<gle::StandardMaterial>(
-      brick_color_texture, brick_normal_texture, 1.0, 1.0);
+  auto stone_material = std::make_shared<gle::StandardMaterial>(
+      stone_color_texture, stone_normal_texture, stone_disp_texture, 0.03, 1.0,
+      1.0);
 
   auto white_material = std::make_shared<gle::SolidColorMaterial>(
       glm::vec3(0.8, 0.8, 0.8), 1.0, 1.0);
@@ -143,12 +145,12 @@ int main() {
 
   auto sphere_mesh = gle::make_ico_sphere_mesh(3);
   auto sphere_object = std::make_shared<gle::Object>(
-      standard_shader, brick_material, sphere_mesh, glm::vec3(-1, 1, 1),
+      standard_shader, stone_material, sphere_mesh, glm::vec3(-1, 1, 1),
       glm::vec3(0), glm::vec3(0.7));
 
   auto plane_mesh = gle::make_plane_mesh(5);
   auto plane_object = std::make_shared<gle::Object>(
-      standard_shader, brick_material, plane_mesh, glm::vec3(-10, 0, -10),
+      standard_shader, stone_material, plane_mesh, glm::vec3(-10, 0, -10),
       glm::vec3(0), glm::vec3(20));
 
   auto arrow_mesh = gle::make_arrow(1);
@@ -197,10 +199,12 @@ int main() {
   window.add_render_pass(render_pass);
 
   window.init(scene);
-  brick_color_texture->init();
-  brick_color_texture->load("examples/col.jpg");
-  brick_normal_texture->init();
-  brick_normal_texture->load("examples/norm.jpg");
+  stone_color_texture->init();
+  stone_color_texture->load("examples/1K/COL_1K.jpg");
+  stone_normal_texture->init();
+  stone_normal_texture->load("examples/1K/NRM_1K.jpg");
+  stone_disp_texture->init();
+  stone_disp_texture->load("examples/1K/DISP_1K.jpg");
 
   auto do_animation = [](std::shared_ptr<CameraStateController>,
                          std::shared_ptr<gle::Object> object) {
