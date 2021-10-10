@@ -77,7 +77,7 @@ inline Window::~Window() {
   glfwTerminate();
 }
 
-inline void Window::init(std::shared_ptr<Scene> scene) {
+inline void Window::init(Scene &scene) {
   glfwInit();
   glfwWindowHint(GLFW_SAMPLES, options().gl_num_samples);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, options().gl_major_version);
@@ -134,32 +134,34 @@ inline void Window::init(std::shared_ptr<Scene> scene) {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_FRAMEBUFFER_SRGB);
 
-  scene->init();
+  scene.init();
 
-  for (auto pass : render_passes) {
+  for (auto &pass : render_passes) {
     pass->load(scene);
   }
 }
 
-inline void Window::start(std::shared_ptr<const Scene> scene) {
+inline void Window::start(const Scene &scene) {
   while (!glfwWindowShouldClose(window())) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for (auto &pass : render_passes) {
+    for (const auto &pass : render_passes) {
       glViewport(0, 0, width(), height());
       pass->do_render(scene);
     }
 
     glfwSwapBuffers(window());
     glfwPollEvents();
-    for (auto task : render_loop_tasks) {
+    for (auto &task : render_loop_tasks) {
       task->update();
     }
   }
 }
 
-inline void Window::add_render_pass(std::shared_ptr<RenderPass> pass) {
-  render_passes.push_back(pass);
+template <class T, class... Args>
+inline RenderPass &Window::make_render_pass(Args &&...args) {
+  render_passes.push_back(std::make_unique<T>(std::forward<Args>(args)...));
+  return *render_passes.back();
 }
 
 constexpr WindowOptions &Window::options() { return _options; }
@@ -178,18 +180,16 @@ inline void KeyboardListener::key_press(int, int) {}
 inline void KeyboardListener::key_repeat(int, int) {}
 inline void KeyboardListener::key_release(int, int) {}
 
-inline void
-Window::add_keyboard_listener(std::shared_ptr<KeyboardListener> listener) {
-  keyboard_listeners.push_back(listener);
+inline void Window::add_keyboard_listener(KeyboardListener &listener) {
+  keyboard_listeners.push_back(&listener);
 }
 
-inline void
-Window::add_mouse_listener(std::shared_ptr<MouseListener> listener) {
-  mouse_listeners.push_back(listener);
+inline void Window::add_mouse_listener(MouseListener &listener) {
+  mouse_listeners.push_back(&listener);
 }
 
-inline void Window::add_task(std::shared_ptr<RenderLoopTask> task) {
-  render_loop_tasks.push_back(task);
+inline void Window::add_task(RenderLoopTask &task) {
+  render_loop_tasks.push_back(&task);
 }
 
 inline KeyboardListener::~KeyboardListener() {}

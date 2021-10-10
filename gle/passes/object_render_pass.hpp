@@ -13,12 +13,12 @@ GLE_NAMESPACE_BEGIN
 
 class ObjectRenderPass : public RenderPass {
 public:
-  inline virtual void render(std::shared_ptr<const Scene> scene) const override;
-  inline virtual void load(std::shared_ptr<Scene> scene) override;
+  inline virtual void render(const Scene &scene) const override;
+  inline virtual void load(Scene &scene) override;
 
 private:
 #ifdef GLE_DEBUG_LINES
-  std::shared_ptr<DebugShader> debug_shader;
+  std::unique_ptr<DebugShader> debug_shader;
 #endif
 };
 

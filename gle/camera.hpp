@@ -10,6 +10,10 @@ GLE_NAMESPACE_BEGIN
 ///
 class Camera {
 public:
+  Camera(Camera &) = delete;
+  Camera(Camera &&) = delete;
+  Camera(const Camera &) = delete;
+  Camera(const Camera &&) = delete;
   /// @brief Construct a new Camera object
   ///
   /// @param origin

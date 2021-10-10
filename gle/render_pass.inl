@@ -1,10 +1,8 @@
 GLE_NAMESPACE_BEGIN
 
-inline void RenderPass::do_render(std::shared_ptr<const Scene> scene) const {
-  render(scene);
-}
+inline void RenderPass::do_render(const Scene &scene) const { render(scene); }
 
-inline void RenderPass::load(std::shared_ptr<Scene>) {}
+inline void RenderPass::load(Scene &) {}
 
 inline RenderPass::~RenderPass() {}
 

@@ -26,12 +26,12 @@ void main() {}
 } // namespace __internal__
 
 inline ShadowRenderPass::ShadowRenderPass() {
-  shader = std::make_shared<Shader>(__internal__::shadow_render_pass_vertex,
+  shader = std::make_unique<Shader>(__internal__::shadow_render_pass_vertex,
                                     __internal__::shadow_render_pass_fragment,
                                     false);
 }
 
-inline void ShadowRenderPass::load(std::shared_ptr<Scene> scene) {
+inline void ShadowRenderPass::load(Scene &scene) {
   shader->load();
 
   // TODO: abstract away opengl calls here
@@ -58,12 +58,12 @@ inline void ShadowRenderPass::load(std::shared_ptr<Scene> scene) {
   glReadBuffer(GL_NONE);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-  scene->shadow_map(depth_tex);
+  scene.shadow_map(depth_tex);
 
-  std::shared_ptr<Light> light = nullptr;
+  const Light *light = nullptr;
 
-  for (auto c_light : scene->lights()) {
-    if (c_light->type == LightType::DIRECTIONAL_LIGHT) light = c_light;
+  for (const auto &c_light : scene.lights()) {
+    if (c_light->type == LightType::DIRECTIONAL_LIGHT) light = c_light.get();
   }
 
   if (!light)
@@ -81,21 +81,21 @@ inline void ShadowRenderPass::load(std::shared_ptr<Scene> scene) {
                   glm::vec3(0.0, 1.0, 0.0));
   auto light_space_matrix = light_projection * light_view;
 
-  scene->light_space_matrix(light_space_matrix);
+  scene.light_space_matrix(light_space_matrix);
 }
 
-inline void ShadowRenderPass::render(std::shared_ptr<const Scene> scene) const {
+inline void ShadowRenderPass::render(const Scene &scene) const {
   glViewport(0, 0, __internal__::shadow_width, __internal__::shadow_height);
   glBindFramebuffer(GL_FRAMEBUFFER, depth_fbo);
   glClear(GL_DEPTH_BUFFER_BIT);
 
-  for (auto object : scene->objects()) {
+  for (const auto &object : scene.objects()) {
 
     shader->use();
-    shader->uniform("light_space_matrix", scene->light_space_matrix().value());
+    shader->uniform("light_space_matrix", scene.light_space_matrix().value());
     shader->uniform("model", object->model_matrix());
 
-    object->mesh()->draw();
+    object->mesh().draw();
   }
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);

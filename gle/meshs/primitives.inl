@@ -15,7 +15,7 @@ inline int vertex_midpoint(std::vector<glm::vec3> &vertices, int a, int b) {
 
 } // namespace __internal__
 
-inline std::shared_ptr<Mesh> make_cube_mesh() {
+inline std::unique_ptr<Mesh> make_cube_mesh() {
   auto vertices = std::vector<glm::vec3>();
   auto triangles = std::vector<glm::uvec3>();
 
@@ -41,10 +41,10 @@ inline std::shared_ptr<Mesh> make_cube_mesh() {
   triangles.push_back(glm::uvec3(3, 2, 6));
   triangles.push_back(glm::uvec3(6, 7, 3));
 
-  return std::make_shared<gle::Mesh>(vertices, triangles);
+  return std::make_unique<gle::Mesh>(vertices, triangles);
 }
 
-inline std::shared_ptr<Mesh> make_ico_sphere_mesh(int subdivisions) {
+inline std::unique_ptr<Mesh> make_ico_sphere_mesh(int subdivisions) {
   auto vertices = std::vector<glm::vec3>();
   auto triangles = std::vector<glm::uvec3>();
   auto uvs = std::vector<glm::vec2>();
@@ -117,10 +117,10 @@ inline std::shared_ptr<Mesh> make_ico_sphere_mesh(int subdivisions) {
                             0.5 - asin(vertex.y) / M_PI));
   }
 
-  return std::make_shared<gle::Mesh>(vertices, uvs, triangles);
+  return std::make_unique<gle::Mesh>(vertices, uvs, triangles);
 }
 
-inline std::shared_ptr<Mesh> make_plane_mesh(int subdivisions) {
+inline std::unique_ptr<Mesh> make_plane_mesh(int subdivisions) {
   auto vertices = std::vector<glm::vec3>();
   auto uvs = std::vector<glm::vec2>();
   auto triangles = std::vector<glm::uvec3>();
@@ -143,10 +143,10 @@ inline std::shared_ptr<Mesh> make_plane_mesh(int subdivisions) {
     }
   }
 
-  return std::make_shared<Mesh>(vertices, uvs, triangles);
+  return std::make_unique<Mesh>(vertices, uvs, triangles);
 }
 
-inline std::shared_ptr<Mesh> make_arrow(float length) {
+inline std::unique_ptr<Mesh> make_arrow(float length) {
   auto vertices = std::vector<glm::vec3>();
   auto triangles = std::vector<glm::uvec3>();
 
@@ -196,7 +196,7 @@ inline std::shared_ptr<Mesh> make_arrow(float length) {
     angle += turn_angle;
   }
 
-  return std::make_shared<Mesh>(vertices, triangles);
+  return std::make_unique<Mesh>(vertices, triangles);
 }
 
 GLE_NAMESPACE_END

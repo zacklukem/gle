@@ -3,37 +3,45 @@ GLE_NAMESPACE_BEGIN
 inline Scene::Scene() : _objects(), _lights() {}
 
 inline void Scene::init() {
-  for (auto object : _objects) {
-    if (!object->shader()->is_loaded()) object->shader()->load();
-    object->mesh()->init_buffers();
+  for (auto &object : _objects) {
+    if (!object->shader().is_loaded()) object->shader().load();
+    object->mesh().init_buffers();
   }
 }
 
-inline void Scene::camera(std::shared_ptr<Camera> camera) { _camera = camera; }
-
-inline void Scene::add_object(std::shared_ptr<Object> object) {
-  _objects.push_back(object);
+template <class... Args> inline Camera &Scene::make_camera(Args &&...args) {
+  _camera = std::make_unique<Camera>(std::forward<Args>(args)...);
+  return *_camera;
 }
 
-inline void Scene::add_light(std::shared_ptr<Light> light) {
-  _lights.push_back(light);
+template <class... Args> inline Object &Scene::make_object(Args &&...args) {
+  _objects.push_back(std::make_unique<Object>(std::forward<Args>(args)...));
+  return *_objects.back();
 }
 
-inline std::shared_ptr<Camera> Scene::camera() const { return _camera; }
+template <class... Args> inline Light &Scene::make_light(Args &&...args) {
+  _lights.push_back(std::make_unique<Light>(std::forward<Args>(args)...));
+  return *_lights.back();
+}
 
-inline const std::vector<std::shared_ptr<Object>> &Scene::objects() const {
+inline const Camera &Scene::camera() const { return *_camera; }
+inline Camera &Scene::camera() { return *_camera; }
+
+inline const std::vector<std::unique_ptr<Object>> &Scene::objects() const {
   return _objects;
 }
 
-inline const std::vector<std::shared_ptr<Light>> &Scene::lights() const {
+inline const std::vector<std::unique_ptr<Light>> &Scene::lights() const {
   return _lights;
 }
 
-inline std::optional<GLuint> Scene::shadow_map() const { return _shadow_map; }
+inline const std::optional<GLuint> &Scene::shadow_map() const {
+  return _shadow_map;
+}
 
 inline void Scene::shadow_map(GLuint tex) { _shadow_map = tex; }
 
-inline std::optional<glm::mat4> Scene::light_space_matrix() const {
+inline const std::optional<glm::mat4> &Scene::light_space_matrix() const {
   return _light_space_matrix;
 }
 

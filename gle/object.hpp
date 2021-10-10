@@ -13,6 +13,10 @@ GLE_NAMESPACE_BEGIN
 ///
 class Object {
 public:
+  Object(Object &) = delete;
+  Object(Object &&) = delete;
+  Object(const Object &) = delete;
+  Object(const Object &&) = delete;
   /// @brief Construct a new Object using the given material and shader
   ///
   /// The S type must be extend gle::Shader, and the M type must extend
@@ -27,34 +31,33 @@ public:
   /// @param rotation
   /// @param scale
   template <class S, class M>
-  inline Object(std::shared_ptr<S> shader, std::shared_ptr<M> material,
-                std::shared_ptr<Mesh> mesh, const glm::vec3 &position,
+  inline Object(S &shader, M &material, Mesh &mesh, const glm::vec3 &position,
                 const glm::quat &rotation, const glm::vec3 &scale);
 
   /// @brief Get the object's shader
   ///
   /// @return the object's shader
-  inline std::shared_ptr<Shader> shader();
+  inline Shader &shader();
 
   /// @brief Get the object's shader
   ///
   /// @return the object's shader
-  inline std::shared_ptr<const Shader> shader() const;
+  inline const Shader &shader() const;
 
   /// @brief Get the objet's material
   ///
   /// @return the object's material
-  inline std::shared_ptr<const Material> material() const;
+  inline const Material &material() const;
 
   /// @brief Get the object's mesh
   ///
   /// @return the object's mesh
-  inline std::shared_ptr<Mesh> mesh();
+  inline Mesh &mesh();
 
   /// @brief Get the object's mesh
   ///
   /// @return the object's mesh
-  inline std::shared_ptr<const Mesh> mesh() const;
+  inline const Mesh &mesh() const;
 
   /// @brief get the object's position
   ///
@@ -103,9 +106,9 @@ public:
 
 private:
   inline void update_model_matrix();
-  std::shared_ptr<Shader> _shader;
-  std::shared_ptr<Material> _material;
-  std::shared_ptr<Mesh> _mesh;
+  Shader &_shader;
+  Material &_material;
+  Mesh &_mesh;
   glm::vec3 _position;
   glm::vec3 _scale;
   glm::quat _rotation;

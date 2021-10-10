@@ -1,9 +1,9 @@
 GLE_NAMESPACE_BEGIN
 
 template <class S, class M>
-inline Object::Object(std::shared_ptr<S> shader, std::shared_ptr<M> material,
-                      std::shared_ptr<Mesh> mesh, const glm::vec3 &position,
-                      const glm::quat &rotation, const glm::vec3 &scale)
+inline Object::Object(S &shader, M &material, Mesh &mesh,
+                      const glm::vec3 &position, const glm::quat &rotation,
+                      const glm::vec3 &scale)
     : _shader(shader), _material(material), _mesh(mesh), _position(position),
       _scale(scale), _rotation(rotation) {
   static_assert(std::is_base_of<Shader, S>::value, "S must extend gle::Shader");
@@ -13,13 +13,11 @@ inline Object::Object(std::shared_ptr<S> shader, std::shared_ptr<M> material,
                 "M must be the same as S::material_type");
   update_model_matrix();
 }
-inline std::shared_ptr<const Shader> Object::shader() const { return _shader; }
-inline std::shared_ptr<Shader> Object::shader() { return _shader; }
-inline std::shared_ptr<const Material> Object::material() const {
-  return _material;
-}
-inline std::shared_ptr<const Mesh> Object::mesh() const { return _mesh; }
-inline std::shared_ptr<Mesh> Object::mesh() { return _mesh; }
+inline const Shader &Object::shader() const { return _shader; }
+inline Shader &Object::shader() { return _shader; }
+inline const Material &Object::material() const { return _material; }
+inline const Mesh &Object::mesh() const { return _mesh; }
+inline Mesh &Object::mesh() { return _mesh; }
 
 inline const glm::vec3 &Object::position() const { return _position; }
 inline const glm::vec3 &Object::scale() const { return _scale; }

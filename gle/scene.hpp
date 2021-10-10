@@ -10,34 +10,32 @@ GLE_NAMESPACE_BEGIN
 class Scene {
 public:
   inline Scene();
-  inline void add_object(std::shared_ptr<Object>);
-  inline void add_light(std::shared_ptr<Light>);
+  template <class... Args> inline Object &make_object(Args &&...args);
+  template <class... Args> inline Light &make_light(Args &&...args);
 
   inline void init();
 
-  /// @brief Set the camera object for this window
-  ///
-  /// @param camera
-  inline void camera(std::shared_ptr<Camera> camera);
+  template <class... Args> inline Camera &make_camera(Args &&...args);
 
-  inline std::shared_ptr<Camera> camera() const;
+  inline const Camera &camera() const;
+  inline Camera &camera();
 
-  inline const std::vector<std::shared_ptr<Object>> &objects() const;
+  inline const std::vector<std::unique_ptr<Object>> &objects() const;
 
-  inline const std::vector<std::shared_ptr<Light>> &lights() const;
+  inline const std::vector<std::unique_ptr<Light>> &lights() const;
 
-  inline std::optional<GLuint> shadow_map() const;
+  inline const std::optional<GLuint> &shadow_map() const;
 
   inline void shadow_map(GLuint tex);
 
-  inline std::optional<glm::mat4> light_space_matrix() const;
+  inline const std::optional<glm::mat4> &light_space_matrix() const;
 
   inline void light_space_matrix(const glm::mat4 &mat);
 
 private:
-  std::shared_ptr<Camera> _camera;
-  std::vector<std::shared_ptr<Object>> _objects;
-  std::vector<std::shared_ptr<Light>> _lights;
+  std::unique_ptr<Camera> _camera;
+  std::vector<std::unique_ptr<Object>> _objects;
+  std::vector<std::unique_ptr<Light>> _lights;
   std::optional<GLuint> _shadow_map;
   std::optional<glm::mat4> _light_space_matrix;
 };

@@ -140,13 +140,12 @@ inline void Shader::load() {
 
 inline void Shader::use() const { glUseProgram(program); }
 
-inline void Shader::use(std::shared_ptr<const Scene> scene,
-                        const MVPShaderUniforms &uniforms,
-                        std::shared_ptr<const Material> material) const {
-  auto lights = scene->lights();
-  auto camera = scene->camera();
+inline void Shader::use(const Scene &scene, const MVPShaderUniforms &uniforms,
+                        const Material &material) const {
+  const auto &lights = scene.lights();
+  const auto &camera = scene.camera();
 
-  material->preload(*this);
+  material.preload(*this);
   glUseProgram(program);
   on_use();
   if (lights.size() > MAX_LIGHTS)
@@ -159,17 +158,17 @@ inline void Shader::use(std::shared_ptr<const Scene> scene,
     uniform((n + "position").c_str(), lights.at(i)->position);
     uniform((n + "attn").c_str(), lights.at(i)->attn);
   }
-  uniform("camera.origin", camera->origin());
-  uniform("camera.direction", camera->direction());
-  if (scene->shadow_map().has_value()) {
+  uniform("camera.origin", camera.origin());
+  uniform("camera.direction", camera.direction());
+  if (scene.shadow_map().has_value()) {
     glActiveTexture(GL_TEXTURE15);
-    glBindTexture(GL_TEXTURE_2D, scene->shadow_map().value());
+    glBindTexture(GL_TEXTURE_2D, scene.shadow_map().value());
     uniform("shadow_map", (GLint)15);
   }
-  if (scene->light_space_matrix().has_value())
-    uniform("light_space_matrix", scene->light_space_matrix().value());
+  if (scene.light_space_matrix().has_value())
+    uniform("light_space_matrix", scene.light_space_matrix().value());
   uniforms.load(*this);
-  material->load(*this);
+  material.load(*this);
 }
 
 inline void Shader::uniform(const char *name, float val) const {
@@ -218,10 +217,10 @@ inline void Shader::uniform(const char *name, const glm::mat4 &val) const {
 }
 
 inline void Shader::uniform(const char *name, GLuint i,
-                            std::shared_ptr<Texture> tex) const {
+                            const Texture &tex) const {
 
   glActiveTexture(GL_TEXTURE0 + i);
-  tex->bind();
+  tex.bind();
   uniform(name, (GLint)i);
 }
 

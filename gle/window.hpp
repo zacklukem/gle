@@ -103,23 +103,20 @@ public:
   /// @brief Initialize the window and enable opengl
   ///
   /// @exception std::runtime_error thrown if opengl or glfw fail to load
-  inline void init(std::shared_ptr<Scene> scene);
+  inline void init(Scene &scene);
 
   /// @brief Start the window rendering loop
   ///
-  inline void start(std::shared_ptr<const Scene> scene);
+  inline void start(const Scene &scene);
 
-  // Getters and setters
-  /// @brief Add a rendering pass to the end of the render past list
-  ///
-  /// @param pass
-  inline void add_render_pass(std::shared_ptr<RenderPass> pass);
+  template <class T, class... Args>
+  inline RenderPass &make_render_pass(Args &&...args);
 
-  inline void add_keyboard_listener(std::shared_ptr<KeyboardListener> listener);
+  inline void add_keyboard_listener(KeyboardListener &listener);
 
-  inline void add_mouse_listener(std::shared_ptr<MouseListener> listener);
+  inline void add_mouse_listener(MouseListener &listener);
 
-  inline void add_task(std::shared_ptr<RenderLoopTask> task);
+  inline void add_task(RenderLoopTask &task);
 
   /// @brief Get the window options structure
   ///
@@ -160,10 +157,10 @@ private:
   std::string _name;
   glm::ivec2 _dimensions;
   WindowOptions _options;
-  std::vector<std::shared_ptr<RenderPass>> render_passes;
-  std::vector<std::shared_ptr<KeyboardListener>> keyboard_listeners;
-  std::vector<std::shared_ptr<MouseListener>> mouse_listeners;
-  std::vector<std::shared_ptr<RenderLoopTask>> render_loop_tasks;
+  std::vector<std::unique_ptr<RenderPass>> render_passes;
+  std::vector<KeyboardListener *> keyboard_listeners;
+  std::vector<MouseListener *> mouse_listeners;
+  std::vector<RenderLoopTask *> render_loop_tasks;
 
   GLFWwindow *_window = nullptr;
   friend inline void __internal__::framebuffer_callback(GLFWwindow *window,

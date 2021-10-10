@@ -3,18 +3,18 @@
 
 GLE_NAMESPACE_BEGIN
 
-inline std::shared_ptr<Mesh> load_obj_from_file(const std::string &file) {
+inline std::unique_ptr<Mesh> load_obj_from_file(const std::string &file) {
   std::ifstream stream(file, std::ios_base::in);
   if (!stream) throw std::runtime_error("obj file not found");
   return load_obj(stream);
 }
 
-inline std::shared_ptr<Mesh> load_obj(const std::string &source) {
+inline std::unique_ptr<Mesh> load_obj(const std::string &source) {
   auto str = std::stringstream(source);
   return load_obj(str);
 }
 
-inline std::shared_ptr<Mesh> load_obj(std::istream &source) {
+inline std::unique_ptr<Mesh> load_obj(std::istream &source) {
   auto vertices = std::vector<glm::vec3>();
   auto triangles = std::vector<glm::uvec3>();
   auto uvs = std::vector<glm::vec2>();
@@ -56,7 +56,7 @@ inline std::shared_ptr<Mesh> load_obj(std::istream &source) {
     isFirst = false;
   }
 
-  auto mesh = std::make_shared<Mesh>(vertices, triangles);
+  auto mesh = std::make_unique<Mesh>(vertices, triangles);
 
   if (vertices.size() == uvs.size()) {
     mesh->uvs(uvs);

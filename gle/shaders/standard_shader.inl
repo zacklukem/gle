@@ -163,9 +163,9 @@ void main() {
 )";
 } // namespace __internal__
 
-inline StandardMaterial::StandardMaterial(std::shared_ptr<Texture> color,
-                                          std::shared_ptr<Texture> normal,
-                                          std::shared_ptr<Texture> depth_map,
+inline StandardMaterial::StandardMaterial(const Texture &color,
+                                          const Texture &normal,
+                                          const Texture &depth_map,
                                           float height_scale, float diffuse,
                                           float specular)
     : color(color), normal(normal), depth_map(depth_map),

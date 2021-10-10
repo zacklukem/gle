@@ -92,9 +92,8 @@ public:
   /// @brief Use the shader and load the given uniforms
   ///
   /// @param uniforms
-  inline void use(std::shared_ptr<const Scene> scene,
-                  const MVPShaderUniforms &uniforms,
-                  std::shared_ptr<const Material> material) const;
+  inline void use(const Scene &scene, const MVPShaderUniforms &uniforms,
+                  const Material &material) const;
 
   /// @brief Set the given uniform to the given value
   ///
@@ -155,8 +154,7 @@ public:
   /// @param name
   /// @param i
   /// @param val
-  inline void uniform(const char *name, GLuint i,
-                      std::shared_ptr<Texture> val) const;
+  inline void uniform(const char *name, GLuint i, const Texture &val) const;
 
   inline bool is_loaded() const;
 

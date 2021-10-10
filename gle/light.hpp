@@ -10,6 +10,10 @@ GLE_NAMESPACE_BEGIN
 enum LightType : std::uint32_t { POINT_LIGHT = 0, DIRECTIONAL_LIGHT = 1 };
 
 struct Light {
+  Light(Light &) = delete;
+  Light(Light &&) = delete;
+  Light(const Light &) = delete;
+  Light(const Light &&) = delete;
   LightType type;
   glm::vec3 position;
   glm::vec3 direction;

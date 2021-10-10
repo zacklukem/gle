@@ -16,18 +16,18 @@ public:
 
   /// @brief Render this pass
   ///
-  inline void do_render(std::shared_ptr<const Scene> scene) const;
+  inline void do_render(const Scene &scene) const;
 
   /// @brief Initialize this pass (called by Window::load() )
   ///
-  inline virtual void load(std::shared_ptr<Scene> scene);
+  inline virtual void load(Scene &scene);
 
 protected:
   /// @brief Render this pass (implementation)
   ///
   /// @pure
   /// @param scene
-  virtual void render(std::shared_ptr<const Scene> scene) const = 0;
+  virtual void render(const Scene &scene) const = 0;
 };
 
 GLE_NAMESPACE_END
