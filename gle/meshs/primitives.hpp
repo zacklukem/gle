@@ -9,19 +9,19 @@ GLE_NAMESPACE_BEGIN
 
 /// @brief Create a cube mesh with width 2
 ///
-/// @return std::unique_ptr<Mesh>
+/// @return std::shared_ptr<Mesh>
 inline std::unique_ptr<Mesh> make_cube_mesh();
 
 /// @brief Create a ico sphere mesh with radius 1
 ///
 /// @param subdivisions the number of ico subdivisions
-/// @return std::unique_ptr<Mesh>
+/// @return std::shared_ptr<Mesh>
 inline std::unique_ptr<Mesh> make_ico_sphere_mesh(int subdivisions = 0);
 
 /// @brief Create a plane mesh
 ///
 /// @param subdivisions the number of grid lines
-/// @return std::unique_ptr<Mesh>
+/// @return std::shared_ptr<Mesh>
 inline std::unique_ptr<Mesh> make_plane_mesh(int subdivisions = 1);
 
 inline std::unique_ptr<Mesh> make_arrow();
