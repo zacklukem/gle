@@ -153,6 +153,10 @@ public:
   /// @return the internal glfw window
   constexpr GLFWwindow *window();
 
+#ifdef DEBUG_TIMER
+  inline double average_frame_time() const;
+#endif
+
 private:
   std::string _name;
   glm::ivec2 _dimensions;
@@ -161,6 +165,10 @@ private:
   std::vector<KeyboardListener *> keyboard_listeners;
   std::vector<MouseListener *> mouse_listeners;
   std::vector<RenderLoopTask *> render_loop_tasks;
+#ifdef DEBUG_TIMER
+  std::size_t frames_rendered = 0;
+  double frame_time = 0;
+#endif
 
   GLFWwindow *_window = nullptr;
   friend inline void __internal__::framebuffer_callback(GLFWwindow *window,

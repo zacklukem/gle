@@ -143,6 +143,9 @@ inline void Window::init(Scene &scene) {
 
 inline void Window::start(const Scene &scene) {
   while (!glfwWindowShouldClose(window())) {
+#ifdef DEBUG_TIMER
+    auto start_time = glfwGetTime();
+#endif
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (const auto &pass : render_passes) {
@@ -155,6 +158,10 @@ inline void Window::start(const Scene &scene) {
     for (auto &task : render_loop_tasks) {
       task->update();
     }
+#ifdef DEBUG_TIMER
+    frames_rendered++;
+    frame_time += glfwGetTime() - start_time;
+#endif
   }
 }
 
@@ -201,5 +208,11 @@ inline MouseListener::~MouseListener() {}
 
 inline void RenderLoopTask::update() {}
 inline RenderLoopTask::~RenderLoopTask() {}
+
+#ifdef DEBUG_TIMER
+inline double Window::average_frame_time() const {
+  return frame_time / (double)frames_rendered;
+}
+#endif
 
 GLE_NAMESPACE_END

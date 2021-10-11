@@ -1,4 +1,5 @@
 #define GLE_VERBOSE
+#define DEBUG_TIMER
 #include <chrono>
 #include <fstream>
 #include <gle/gle.hpp>
@@ -214,4 +215,6 @@ int main() {
   auto animation_thread = std::thread(do_animation, &sphere_object);
   animation_thread.detach();
   window.start(scene);
+  std::cout << "Average Frame Time: " << window.average_frame_time() * 1000.0
+            << std::endl;
 }
