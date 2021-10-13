@@ -63,9 +63,15 @@ public:
                      .min_filter = GL_LINEAR_MIPMAP_LINEAR,
                      .mag_filter = GL_LINEAR};
 
-  inline ImageTexture(const TextureOptions &options = default_options);
-  inline void load(const std::string &file);
+  inline ImageTexture(const std::string &filename,
+                      const TextureOptions &options = default_options);
+  inline void load();
+
+private:
   inline void load(std::istream &stream);
+
+private:
+  std::string filename;
 };
 
 GLE_NAMESPACE_END

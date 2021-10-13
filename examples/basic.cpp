@@ -136,9 +136,9 @@ int main() {
   auto solid_shader = gle::SolidColorShader();
   auto standard_shader = gle::StandardShader();
 
-  auto stone_color_texture = gle::ImageTexture();
-  auto stone_normal_texture = gle::ImageTexture();
-  auto stone_disp_texture = gle::ImageTexture();
+  auto stone_color_texture = gle::ImageTexture("examples/1K/COL_1K.jpg");
+  auto stone_normal_texture = gle::ImageTexture("examples/1K/NRM_1K.jpg");
+  auto stone_disp_texture = gle::ImageTexture("examples/1K/DISP_1K.jpg");
 
   auto stone_material =
       gle::StandardMaterial(stone_color_texture, stone_normal_texture,
@@ -197,11 +197,11 @@ int main() {
 
   window.init(scene);
   stone_color_texture.init();
-  stone_color_texture.load("examples/1K/COL_1K.jpg");
+  stone_color_texture.load();
   stone_normal_texture.init();
-  stone_normal_texture.load("examples/1K/NRM_1K.jpg");
+  stone_normal_texture.load();
   stone_disp_texture.init();
-  stone_disp_texture.load("examples/1K/DISP_1K.jpg");
+  stone_disp_texture.load();
 
   auto do_animation = [](gle::Object *object) {
     while (true) {

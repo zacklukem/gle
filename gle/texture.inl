@@ -60,11 +60,12 @@ inline ImageData::ImageData(uint8_t *data, size_t width, size_t height,
 
 inline ImageData::~ImageData() { stbi_image_free(data); }
 
-inline ImageTexture::ImageTexture(const TextureOptions &options)
-    : Texture(options) {}
+inline ImageTexture::ImageTexture(const std::string &filename,
+                                  const TextureOptions &options)
+    : Texture(options), filename(filename) {}
 
-inline void ImageTexture::load(const std::string &file) {
-  auto stream = std::ifstream(file, std::ios_base::in);
+inline void ImageTexture::load() {
+  auto stream = std::ifstream(filename, std::ios_base::in);
   load(stream);
 }
 

@@ -1,0 +1,69 @@
+# Example scene file
+
+[texture.stone_color]
+file = "examples/1K/COL_1K.jpg"
+
+[texture.stone_normal]
+file = "examples/1K/NRM_1K.jpg"
+
+[texture.stone_disp]
+file = "examples/1K/DISP_1K.jpg"
+
+[mesh.tea_pot]
+file = "examples/teacup.obj"
+
+[mesh.plane]
+gen = "gle::make_plane_mesh"
+args = [5]
+
+[mesh.sphere]
+gen = "gle::make_sphere_mesh"
+args = [3]
+
+[material.stone]
+shader = "shader.standard"
+albedo = "texture.stone_color"
+normal = "texture.stone_normal"
+displacement = "texture.stone_disp"
+displacement_scale = 0.03
+specular = 1.0
+diffuse = 1.0
+
+[material.tea_pot]
+shader = "shader.solid_color"
+albedo = [1, 1, 1]
+specular = 1.0
+diffuse = 1.0
+
+[lights.main]
+type = "directional"
+origin = [0, 0, 0]
+direction = [-1, -1, -1]
+color = [1, 1, 1]
+strength = 1.0
+
+[[objects]]
+material = "material.stone"
+mesh = "mesh.sphere"
+position = [-1, 1, 1]
+scale = 0.7
+
+[[objects]]
+material = "material.stone"
+mesh = "mesh.plane"
+position = [-10, 0, -10]
+scale = [20, 1, 20]
+
+[[objects]]
+material = "material.tea_pot"
+mesh = "mesh.tea_pot"
+position = [-3, 0, -2]
+rotation = [45, 0, 23]
+
+[camera]
+position = [10, 5, 10]
+direction = [-10, -5, -10]
+aspect = 1.5
+fov = 45
+z_near = 0.1
+z_far = 100
