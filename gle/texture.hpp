@@ -45,10 +45,17 @@ private:
 
 class Texture {
 public:
+  Texture(Texture &) = delete;
+  Texture(Texture &&) = delete;
+  Texture(const Texture &) = delete;
+  Texture(const Texture &&) = delete;
   inline Texture(const TextureOptions &options);
   inline void init();
   inline void bind() const;
-  inline ~Texture();
+  virtual inline ~Texture();
+
+protected:
+  virtual inline void load();
 
 private:
   TextureOptions options;
@@ -65,7 +72,9 @@ public:
 
   inline ImageTexture(const std::string &filename,
                       const TextureOptions &options = default_options);
-  inline void load();
+
+protected:
+  virtual inline void load() override;
 
 private:
   inline void load(std::istream &stream);

@@ -94,6 +94,7 @@ inline void Texture::init() {
                     GL_LINEAR_MIPMAP_LINEAR);
   if (options.mag_filter)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  this->load();
 }
 
 inline void Texture::bind() const { glBindTexture(GL_TEXTURE_2D, handle); }
@@ -101,5 +102,7 @@ inline void Texture::bind() const { glBindTexture(GL_TEXTURE_2D, handle); }
 inline Texture::Texture(const TextureOptions &options)
     : options(options), handle(0) {}
 inline Texture::~Texture() { glDeleteTextures(1, &handle); }
+
+inline void Texture::load() {}
 
 GLE_NAMESPACE_END

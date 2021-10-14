@@ -13,6 +13,11 @@ GLE_NAMESPACE_BEGIN
 ///
 class Mesh {
 public:
+  Mesh(Mesh &) = delete;
+  Mesh(Mesh &&) = delete;
+  Mesh(const Mesh &) = delete;
+  Mesh(const Mesh &&) = delete;
+
   /// @brief Construct a new Mesh object with given triangles, then generate
   ///        surface normals
   ///

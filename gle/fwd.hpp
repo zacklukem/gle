@@ -9,6 +9,7 @@ class Window;
 struct WindowOptions;
 class RenderPass;
 class Shader;
+struct Material;
 class Object;
 class Mesh;
 class MVPShaderOptions;

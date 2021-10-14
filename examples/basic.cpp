@@ -133,50 +133,50 @@ int main() {
 
   auto scene = gle::Scene();
 
-  auto solid_shader = gle::SolidColorShader();
-  auto standard_shader = gle::StandardShader();
+  auto &solid_shader = scene.make_shader<gle::SolidColorShader>();
+  auto &standard_shader = scene.make_shader<gle::StandardShader>();
 
-  auto stone_color_texture = gle::ImageTexture("examples/1K/COL_1K.jpg");
-  auto stone_normal_texture = gle::ImageTexture("examples/1K/NRM_1K.jpg");
-  auto stone_disp_texture = gle::ImageTexture("examples/1K/DISP_1K.jpg");
+  auto &stone_color_texture =
+      scene.make_texture<gle::ImageTexture>("examples/1K/COL_1K.jpg");
+  auto &stone_normal_texture =
+      scene.make_texture<gle::ImageTexture>("examples/1K/NRM_1K.jpg");
+  auto &stone_disp_texture =
+      scene.make_texture<gle::ImageTexture>("examples/1K/DISP_1K.jpg");
 
-  auto stone_material =
-      gle::StandardMaterial(stone_color_texture, stone_normal_texture,
-                            stone_disp_texture, 0.03, 1.0, 1.0);
+  auto &stone_material = scene.make_material<gle::StandardMaterial>(
+      stone_color_texture, stone_normal_texture, stone_disp_texture, 0.03, 1.0,
+      1.0);
 
-  auto white_material =
-      gle::SolidColorMaterial(glm::vec3(0.8, 0.8, 0.8), 1.0, 1.0);
+  auto &white_material = scene.make_material<gle::SolidColorMaterial>(
+      glm::vec3(0.8, 0.8, 0.8), 1.0, 1.0);
 
-  auto red_material =
-      gle::SolidColorMaterial(glm::vec3(1.0, 0.0, 0.0), 1.0, 1.0);
-  auto green_material =
-      gle::SolidColorMaterial(glm::vec3(0.0, 1.0, 0.0), 1.0, 1.0);
-  auto blue_material =
-      gle::SolidColorMaterial(glm::vec3(0.0, 0.0, 1.0), 1.0, 1.0);
-  auto yellow_material =
-      gle::SolidColorMaterial(glm::vec3(1.0, 1.0, 0.0), 1.0, 1.0);
+  auto &red_material = scene.make_material<gle::SolidColorMaterial>(
+      glm::vec3(1.0, 0.0, 0.0), 1.0, 1.0);
+  auto &green_material = scene.make_material<gle::SolidColorMaterial>(
+      glm::vec3(0.0, 1.0, 0.0), 1.0, 1.0);
+  auto &blue_material = scene.make_material<gle::SolidColorMaterial>(
+      glm::vec3(0.0, 0.0, 1.0), 1.0, 1.0);
 
-  auto obj_mesh = gle::load_obj_from_file("examples/teacup.obj");
-  scene.make_object(solid_shader, white_material, *obj_mesh,
+  auto &obj_mesh = scene.mesh(gle::load_obj_from_file("examples/teacup.obj"));
+  scene.make_object(solid_shader, white_material, obj_mesh,
                     glm::vec3(-3, 0, -2), glm::vec3(0, 0, 0), glm::vec3(1));
 
-  auto sphere_mesh = gle::make_ico_sphere_mesh(3);
+  auto &sphere_mesh = scene.mesh(gle::make_ico_sphere_mesh(3));
   auto &sphere_object =
-      scene.make_object(standard_shader, stone_material, *sphere_mesh,
+      scene.make_object(standard_shader, stone_material, sphere_mesh,
                         glm::vec3(-1, 1, 1), glm::vec3(0), glm::vec3(0.7));
 
-  auto plane_mesh = gle::make_plane_mesh(5);
-  scene.make_object(standard_shader, stone_material, *plane_mesh,
+  auto &plane_mesh = scene.mesh(gle::make_plane_mesh(5));
+  scene.make_object(standard_shader, stone_material, plane_mesh,
                     glm::vec3(-10, 0, -10), glm::vec3(0), glm::vec3(20));
 
-  auto arrow_mesh = gle::make_arrow(1);
-  scene.make_object(solid_shader, green_material, *arrow_mesh,
+  auto &arrow_mesh = scene.mesh(gle::make_arrow(1));
+  scene.make_object(solid_shader, green_material, arrow_mesh,
                     glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1));
-  scene.make_object(solid_shader, red_material, *arrow_mesh, glm::vec3(0, 0, 0),
+  scene.make_object(solid_shader, red_material, arrow_mesh, glm::vec3(0, 0, 0),
                     glm::vec3(0, 0, -M_PI / 2), glm::vec3(1));
-  scene.make_object(solid_shader, blue_material, *arrow_mesh,
-                    glm::vec3(0, 0, 0), glm::vec3(M_PI / 2, 0, 0),
-                    glm::vec3(1));
+  scene.make_object(solid_shader, blue_material, arrow_mesh, glm::vec3(0, 0, 0),
+                    glm::vec3(M_PI / 2, 0, 0), glm::vec3(1));
 
   scene.make_light(gle::DIRECTIONAL_LIGHT, glm::vec3(0, 0, 0),
                    glm::vec3(-1, -1, -1), glm::vec3(1), 1.0);
@@ -196,12 +196,6 @@ int main() {
   window.make_render_pass<gle::ObjectRenderPass>();
 
   window.init(scene);
-  stone_color_texture.init();
-  stone_color_texture.load();
-  stone_normal_texture.init();
-  stone_normal_texture.load();
-  stone_disp_texture.init();
-  stone_disp_texture.load();
 
   auto do_animation = [](gle::Object *object) {
     while (true) {
@@ -214,6 +208,7 @@ int main() {
 
   auto animation_thread = std::thread(do_animation, &sphere_object);
   animation_thread.detach();
+
   window.start(scene);
   std::cout << "Average Frame Time: " << window.average_frame_time() * 1000.0
             << std::endl;

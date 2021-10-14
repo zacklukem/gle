@@ -3,9 +3,16 @@ GLE_NAMESPACE_BEGIN
 inline Scene::Scene() : _objects(), _lights() {}
 
 inline void Scene::init() {
-  for (auto &object : _objects) {
-    if (!object->shader().is_loaded()) object->shader().load();
-    object->mesh().init_buffers();
+  for (auto &texture : _textures) {
+    texture->init();
+  }
+
+  for (auto &mesh : _meshs) {
+    mesh->init_buffers();
+  }
+
+  for (auto &shader : _shaders) {
+    shader->load();
   }
 }
 
@@ -22,6 +29,29 @@ template <class... Args> inline Object &Scene::make_object(Args &&...args) {
 template <class... Args> inline Light &Scene::make_light(Args &&...args) {
   _lights.push_back(std::make_unique<Light>(std::forward<Args>(args)...));
   return *_lights.back();
+}
+
+template <class T, class... Args>
+inline Texture &Scene::make_texture(Args &&...args) {
+  _textures.push_back(std::make_unique<T>(std::forward<Args>(args)...));
+  return *_textures.back();
+}
+
+template <class T, class... Args>
+inline Material &Scene::make_material(Args &&...args) {
+  _materials.push_back(std::make_unique<T>(std::forward<Args>(args)...));
+  return *_materials.back();
+}
+
+template <class T, class... Args>
+inline Shader &Scene::make_shader(Args &&...args) {
+  _shaders.push_back(std::make_unique<T>(std::forward<Args>(args)...));
+  return *_shaders.back();
+}
+
+inline Mesh &Scene::mesh(std::unique_ptr<Mesh> mesh) {
+  _meshs.push_back(std::move(mesh));
+  return *_meshs.back();
 }
 
 inline const Camera &Scene::camera() const { return *_camera; }
