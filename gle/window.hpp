@@ -118,6 +118,8 @@ public:
 
   inline void add_task(RenderLoopTask &task);
 
+  inline void clear_color(const glm::vec4 &clear_color);
+
   /// @brief Get the window options structure
   ///
   /// @return the window options structure
@@ -165,6 +167,7 @@ private:
   std::vector<KeyboardListener *> keyboard_listeners;
   std::vector<MouseListener *> mouse_listeners;
   std::vector<RenderLoopTask *> render_loop_tasks;
+  glm::vec4 _clear_color;
 #ifdef DEBUG_TIMER
   std::size_t frames_rendered = 0;
   double frame_time = 0;

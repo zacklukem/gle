@@ -59,18 +59,19 @@ inline void mouse_move_callback(GLFWwindow *window, double x, double y) {
 } // namespace __internal__
 
 inline Window::Window(const std::string &name, const glm::ivec2 &dimensions)
-    : _name(name), _dimensions(dimensions), render_passes() {}
+    : _name(name), _dimensions(dimensions), render_passes(), _clear_color(1) {}
 inline Window::Window(const std::string &name, int width, int height)
-    : _name(name), _dimensions(width, height), render_passes() {}
+    : _name(name), _dimensions(width, height), render_passes(),
+      _clear_color(1) {}
 
 inline Window::Window(const std::string &name, WindowOptions options,
                       const glm::ivec2 &dimensions)
-    : _name(name), _dimensions(dimensions), _options(options), render_passes() {
-}
+    : _name(name), _dimensions(dimensions), _options(options), render_passes(),
+      _clear_color(1) {}
 inline Window::Window(const std::string &name, WindowOptions options, int width,
                       int height)
     : _name(name), _dimensions(width, height), _options(options),
-      render_passes() {}
+      render_passes(), _clear_color(1) {}
 
 inline Window::~Window() {
   glfwDestroyWindow(window());
@@ -146,6 +147,8 @@ inline void Window::start(const Scene &scene) {
 #ifdef DEBUG_TIMER
     auto start_time = glfwGetTime();
 #endif
+    glClearColor(_clear_color.r, _clear_color.g, _clear_color.b,
+                 _clear_color.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (const auto &pass : render_passes) {
@@ -197,6 +200,10 @@ inline void Window::add_mouse_listener(MouseListener &listener) {
 
 inline void Window::add_task(RenderLoopTask &task) {
   render_loop_tasks.push_back(&task);
+}
+
+inline void Window::clear_color(const glm::vec4 &clear_color) {
+  _clear_color = clear_color;
 }
 
 inline KeyboardListener::~KeyboardListener() {}
