@@ -431,6 +431,10 @@ public:
     out << "#include <memory>\n";
     out << "#include <glm/glm.hpp>\n";
     out << "#include <gle/gle.hpp>\n";
+    auto ns = table["namespace"].as_string();
+    if (ns != nullptr) {
+      out << "namespace " << ns->get() << " {\n";
+    }
     out << R"(#if defined(__clang__)
 #  pragma clang diagnostic push
 #  pragma clang diagnostic ignored "-Wunused-variable"
@@ -439,7 +443,7 @@ public:
 #  pragma GCC diagnostic ignored "-Wunused-variable"
 #endif
 )";
-    out << "std::unique_ptr<gle::Scene> make_scene() {\n";
+    out << "inline std::unique_ptr<gle::Scene> make_scene() {\n";
     out << "auto scene = std::make_unique<gle::Scene>();\n";
     out << "// SHADERS\n";
     out << parse_shaders() << "\n// TEXTURES\n";
@@ -457,6 +461,9 @@ public:
 #  pragma GCC diagnostic pop
 #endif
 )";
+    if (ns != nullptr) {
+      out << "} // namespace " << ns->get() << "\n";
+    }
     size_t h = std::hash<std::string>{}(out.str());
     std::stringstream guarded;
     guarded << "#ifndef _" << std::hex << h << "\n";

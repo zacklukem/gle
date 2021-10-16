@@ -1,4 +1,5 @@
 # Example scene file
+namespace = "toml_scene"
 
 [shader.standard]
 constructor = "gle::StandardShader"
