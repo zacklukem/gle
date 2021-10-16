@@ -1,23 +1,34 @@
 # Example scene file
 
+[shader.standard]
+constructor = "gle::StandardShader"
+material = "gle::StandardMaterial"
+material_args = ["texture albedo", "texture normal", "texture displacement",
+                 "float displacement_scale", "float specular", "float diffuse"]
+
+[shader.solid_color]
+constructor = "gle::SolidColorShader"
+material = "gle::SolidColorMaterial"
+material_args = ["vec3 albedo", "float specular", "float diffuse"]
+
 [texture.stone_color]
-file = "examples/1K/COL_1K.jpg"
+file = "res/COL_1K.jpg"
 
 [texture.stone_normal]
-file = "examples/1K/NRM_1K.jpg"
+file = "res/NRM_1K.jpg"
 
 [texture.stone_disp]
-file = "examples/1K/DISP_1K.jpg"
+file = "res/DISP_1K.jpg"
 
 [mesh.tea_pot]
-file = "examples/teacup.obj"
+file = "res/teacup.obj"
 
 [mesh.plane]
 gen = "gle::make_plane_mesh"
 args = [5]
 
 [mesh.sphere]
-gen = "gle::make_sphere_mesh"
+gen = "gle::make_ico_sphere_mesh"
 args = [3]
 
 [material.stone]
@@ -35,26 +46,26 @@ albedo = [1, 1, 1]
 specular = 1.0
 diffuse = 1.0
 
-[lights.main]
+[light.main]
 type = "directional"
 origin = [0, 0, 0]
 direction = [-1, -1, -1]
 color = [1, 1, 1]
 strength = 1.0
 
-[[objects]]
+[object.sphere]
 material = "material.stone"
 mesh = "mesh.sphere"
 position = [-1, 1, 1]
 scale = 0.7
 
-[[objects]]
+[object.ground]
 material = "material.stone"
 mesh = "mesh.plane"
 position = [-10, 0, -10]
 scale = [20, 1, 20]
 
-[[objects]]
+[object.tea_pot]
 material = "material.tea_pot"
 mesh = "mesh.tea_pot"
 position = [-3, 0, -2]

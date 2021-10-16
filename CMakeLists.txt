@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.8)
 project(playgl)
 
+include(${PROJECT_SOURCE_DIR}/cmake/globals.cmake)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
@@ -18,26 +20,24 @@ add_compile_options(
 )
 
 add_library(glad "thirdparty/glad/src/glad.c")
-target_include_directories(glad PUBLIC thirdparty/glad/include)
-
-set(INCLUDE_DIRECTORIES
-	PUBLIC .
-  PUBLIC thirdparty/glad/include
-  PUBLIC thirdparty/stb
-	PUBLIC ${GLM_INCLUDE_DIRS}
-	PUBLIC ${GLFW3_INCLUDE_DIRS}
+target_include_directories(glad
+  PUBLIC ${PROJECT_SOURCE_DIR}/thirdparty/glad/include
 )
 
-set(LIBS glfw glad)
+add_subdirectory(scene)
 
 # Tests
 add_executable(tests tests/main.cpp)
-target_include_directories(tests ${INCLUDE_DIRECTORIES} PUBLIC thirdparty/doctest/doctest/)
-target_link_libraries(tests ${LIBS})
-add_custom_target(test DEPENDS tests)
-add_custom_command(TARGET test COMMAND "bin/tests")
+target_include_directories(tests
+  ${GL_INCLUDE_DIRECTORIES}
+  PUBLIC ${PROJECT_SOURCE_DIR}/thirdparty/doctest/doctest/
+)
+target_link_libraries(tests ${GL_LIBS})
+add_custom_target(test DEPENDS tests scene_tests)
+add_custom_command(TARGET test
+  COMMAND "bin/tests"
+  COMMAND "bin/scene_tests"
+)
 
 # Examples
-add_executable(basic examples/basic.cpp)
-target_include_directories(basic ${INCLUDE_DIRECTORIES})
-target_link_libraries(basic ${LIBS})
+add_subdirectory(examples)

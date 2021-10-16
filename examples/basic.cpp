@@ -137,11 +137,11 @@ int main() {
   auto &standard_shader = scene.make_shader<gle::StandardShader>();
 
   auto &stone_color_texture =
-      scene.make_texture<gle::ImageTexture>("examples/1K/COL_1K.jpg");
+      scene.make_texture<gle::ImageTexture>("res/COL_1K.jpg");
   auto &stone_normal_texture =
-      scene.make_texture<gle::ImageTexture>("examples/1K/NRM_1K.jpg");
+      scene.make_texture<gle::ImageTexture>("res/NRM_1K.jpg");
   auto &stone_disp_texture =
-      scene.make_texture<gle::ImageTexture>("examples/1K/DISP_1K.jpg");
+      scene.make_texture<gle::ImageTexture>("res/DISP_1K.jpg");
 
   auto &stone_material = scene.make_material<gle::StandardMaterial>(
       stone_color_texture, stone_normal_texture, stone_disp_texture, 0.03, 1.0,
@@ -157,7 +157,7 @@ int main() {
   auto &blue_material = scene.make_material<gle::SolidColorMaterial>(
       glm::vec3(0.0, 0.0, 1.0), 1.0, 1.0);
 
-  auto &obj_mesh = scene.mesh(gle::load_obj_from_file("examples/teacup.obj"));
+  auto &obj_mesh = scene.mesh(gle::load_obj_from_file("res/teacup.obj"));
   scene.make_object(solid_shader, white_material, obj_mesh,
                     glm::vec3(-3, 0, -2), glm::vec3(0, 0, 0), glm::vec3(1));
 
